@@ -7,19 +7,22 @@ import Product from "./pages/Product/Product";
 import Order from "./pages/Order/Order";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
+import Wrapper from "./components/Wrapper/Wrapper";
 
 function App() {
   return (
     <>
       <Router>
-        <Header />
-        <Routes>
-          <Route path="/" element={<Main />} />
-          <Route path="/product/:id" element={<Product />} />
-          <Route path="/chart" element={<Chart />} />
-          <Route path="/order" element={<Order />} />
-          <Route path="/history" element={<History />} />
-        </Routes>
+        <Wrapper>
+          <Header />
+          <Routes>
+            <Route path="/" element={<Main />} />
+            <Route path="/product/:id" element={<Product />} />
+            <Route path="/chart" element={<Chart />} />
+            <Route path="/order" element={<Order />} />
+            <Route path="/history" element={<History />} />
+          </Routes>
+        </Wrapper>
         <Footer />
       </Router>
     </>

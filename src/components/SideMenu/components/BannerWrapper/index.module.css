@@ -1,0 +1,26 @@
+.container {
+  display: flex;
+  padding: 25px 25px 25px 5px;
+}
+
+.buttonContainer {
+  position: relative;
+  top: 83px;
+  right: 211px;
+  width: 0px;
+}
+
+.button {
+  height: 40px;
+  border: none;
+  border-radius: 50px;
+  background-color: #2967ff;
+  padding: 10px 25px;
+
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 18px;
+  color: white;
+  white-space: nowrap;
+  cursor: pointer;
+}

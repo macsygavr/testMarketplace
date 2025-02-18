@@ -1,0 +1,20 @@
+.container {
+  display: flex;
+  width: 100%;
+}
+
+.leftBlock {
+  width: 100%;
+}
+
+.rightBlock {
+  min-width: 350px;
+}
+
+@media screen and (max-width: 1280px) {
+  .rightBlock {
+    min-width: 0px;
+    max-width: 0px;
+    visibility: hidden;
+  }
+}
