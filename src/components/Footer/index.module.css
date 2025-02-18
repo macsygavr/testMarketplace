@@ -1,0 +1,74 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 215px;
+  background-color: #f8f8f8;
+  padding: 32px 120px 35px 50px;
+}
+
+.upperBlock {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.iconText {
+  font-family: Montserrat;
+  font-weight: 700;
+  font-size: 40px;
+  line-height: 50px;
+  cursor: pointer;
+}
+
+.actionsBlock {
+  display: flex;
+  column-gap: 30px;
+  margin-top: 10px;
+}
+
+.actionsSubblockContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.actionsSubblockText {
+  margin-bottom: 10px;
+
+  font-size: 16px;
+  line-height: 22px;
+  color: #2d2d2f;
+}
+
+.socialMediaIcons {
+  display: flex;
+  column-gap: 16px;
+}
+
+.socialMediaIcons > svg {
+  cursor: pointer;
+}
+
+.appIcons {
+  display: flex;
+  column-gap: 20px;
+}
+
+.appIcons > svg {
+  cursor: pointer;
+}
+
+.buttomBlock {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  column-gap: 20px;
+
+  font-size: 14px;
+  line-height: 16px;
+  color: #8D8D8E;
+}
+
+.clickable {
+  cursor: pointer;
+}

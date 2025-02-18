@@ -1,0 +1,117 @@
+.container {
+  display: flex;
+  align-items: center;
+  padding: 20px 50px;
+}
+
+.iconText {
+  font-weight: 700;
+  font-size: 38px;
+  line-height: 44px;
+  color: #2d2d2f;
+  margin-right: 24px;
+  cursor: pointer;
+}
+
+.addressContainer {
+  display: flex;
+  align-items: center;
+  column-gap: 5px;
+
+  margin-right: 20px;
+
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: #727280;
+  white-space: nowrap;
+}
+
+.searchInputContainer {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-right: 16px;
+}
+
+.searchBtnContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 0px;
+  right: 100px;
+}
+
+.searchBtn {
+  border: none;
+  background-color: #f0f4fb;
+  min-width: 94px;
+  height: 42px;
+  border-radius: 41px;
+  padding: 0;
+  cursor: pointer;
+}
+
+.searchInput {
+  width: 100%;
+  border-radius: 36px;
+  border: 1px solid #f0f4fb;
+  padding: 16px 110px 16px 20px;
+  font-size: 16px;
+}
+
+.searchInput::placeholder {
+  font-size: 16px;
+  line-height: 18px;
+  color: #727280;
+}
+
+.searchInput:focus-visible {
+  outline: none;
+}
+
+.profileContainer {
+  display: flex;
+
+  height: 50px;
+}
+
+.chartContainer {
+  display: flex;
+}
+
+.chartIcon {
+  cursor: pointer;
+}
+
+.chartCounter {
+  position: relative;
+  bottom: 6px;
+  right: 16px;
+  width: 12px;
+  height: 16px;
+  padding: 4px;
+
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  white-space: nowrap;
+  color: #2967ff;
+
+  background-color: white;
+  cursor: pointer;
+}
+
+.imgContainer {
+  width: 50px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.mainImg {
+  position: relative;
+  top: -24px;
+  left: -110px;
+  width: 214px;
+  height: 141px;
+}
