@@ -10,16 +10,18 @@ const Header = () => {
   const navigate = useNavigate();
 
   const handleGoToChart = () => {
-    navigate('/chart')
-  }
+    navigate("/chart");
+  };
 
   const handleGoToMainPage = () => {
-    navigate('/')
-  }
+    navigate("/");
+  };
 
   return (
     <div className={css.container}>
-      <div className={css.iconText} onClick={handleGoToMainPage}>React</div>
+      <div className={css.iconText} onClick={handleGoToMainPage}>
+        React
+      </div>
       <div className={css.addressContainer}>
         <AddressIcon />
         Александровск-Са...
@@ -45,7 +47,7 @@ const Header = () => {
           <div className={css.chartCounter}>0</div>
         </div>
         <div className={css.imgContainer}>
-          <img className={css.mainImg} src={"/avatar.png"} alt={''} />
+          <img className={css.mainImg} src={"/avatar.png"} alt={""} />
         </div>
       </div>
     </div>

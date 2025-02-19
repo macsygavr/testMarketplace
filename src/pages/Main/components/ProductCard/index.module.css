@@ -1,0 +1,69 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 214px;
+  cursor: pointer;
+}
+
+.upperBlock {
+  display: flex;
+  flex-direction: column;
+}
+
+.productName {
+  line-height: 20px;
+  color: #2d2d2f;
+  margin-top: 5px;
+}
+
+.priceBlock {
+  display: flex;
+  flex-direction: column;
+  margin-top: 5px;
+}
+
+.minPrice {
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 26px;
+  color: #2967ff;
+}
+
+.previousPriceBlock {
+  display: flex;
+  align-items: center;
+}
+
+.previousPrice {
+  font-size: 14px;
+  line-height: 18px;
+  color: #8d8d8e;
+  margin-right: 16px;
+  text-decoration: line-through;
+}
+
+.discount {
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 20px;
+  color: #ff2d87;
+}
+
+.button {
+  border: 1px solid #2967ff;
+  border-radius: 26px;
+  color: #2967ff;
+  font-size: 14px;
+  line-height: 20px;
+  padding: 10px 40px;
+  cursor: pointer;
+  background-color: white;
+  white-space: nowrap;
+  margin-top: 10px;
+}
+
+.img {
+  height: 138px;
+  object-fit: contain;
+}
