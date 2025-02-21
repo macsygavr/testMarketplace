@@ -24,6 +24,7 @@
 }
 
 .minPrice {
+  font-family: Montserrat;
   font-weight: 600;
   font-size: 20px;
   line-height: 26px;
@@ -31,11 +32,13 @@
 }
 
 .previousPriceBlock {
+  font-family: Montserrat;
   display: flex;
   align-items: center;
 }
 
 .previousPrice {
+  font-family: Montserrat;
   font-size: 14px;
   line-height: 18px;
   color: #8d8d8e;

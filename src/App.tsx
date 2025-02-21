@@ -7,22 +7,25 @@ import Product from "./pages/Product/Product";
 import Order from "./pages/Order/Order";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
-import Wrapper from "./components/Wrapper/Wrapper";
+import SideMenuWrapper from "./components/SideMenuWrapper/SideMenuWrapper";
+import PageWrapper from "./components/PageWrapper/PageWrapper";
 
 function App() {
   return (
     <>
       <Router>
-        <Wrapper>
+        <SideMenuWrapper>
           <Header />
-          <Routes>
-            <Route path="/" element={<Main />} />
-            <Route path="/product/:id" element={<Product />} />
-            <Route path="/chart" element={<Chart />} />
-            <Route path="/order" element={<Order />} />
-            <Route path="/history" element={<History />} />
-          </Routes>
-        </Wrapper>
+          <PageWrapper>
+            <Routes>
+              <Route path="/" element={<Main />} />
+              <Route path="/product/:id" element={<Product />} />
+              <Route path="/chart" element={<Chart />} />
+              <Route path="/order" element={<Order />} />
+              <Route path="/history" element={<History />} />
+            </Routes>
+          </PageWrapper>
+        </SideMenuWrapper>
         <Footer />
       </Router>
     </>

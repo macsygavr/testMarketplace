@@ -1,3 +1,143 @@
-.container {
-  background-color: blueviolet;
+.backBtnContainer {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.icon {
+  margin-right: 5px;
+}
+
+.backBtnText {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 22px;
+  color: #2967ff;
+}
+
+.productContainer {
+  display: flex;
+  flex-direction: column;
+  margin-top: 42px;
+}
+
+.productName {
+  font-family: Montserrat;
+  font-weight: 700;
+  font-size: 30px;
+  line-height: 38px;
+  color: #2d2d2f;
+}
+
+.detailInfoContainer {
+  display: flex;
+  column-gap: 20px;
+  margin-top: 30px;
+}
+
+.carouselContainer {
+  width: 448px;
+}
+
+.infoContainer {
+  width: 478px;
+  height: min-content;
+  border-radius: 20px;
+  background-color: #f0f4fb;
+  padding: 20px;
+}
+
+.mySwiper {
+  height: 448px;
+  width: 448px;
+}
+
+.mySwiper :global(.swiper-slide img) {
+  height: 448px;
+  width: 448px;
+  object-fit: contain;
+}
+
+.mySwiper2 {
+  height: 100px;
+  box-sizing: border-box;
+  padding: 8px 0;
+}
+
+.mySwiper2 :global(.swiper-slide) {
+  margin-right: 2px;
+}
+
+.mySwiper2 :global(.swiper-slide img) {
+  width: 80px;
+  height: 80px;
+  opacity: 0.6;
+  cursor: pointer;
+  object-fit: contain;
+}
+
+.mySwiper2 :global(.swiper-slide-thumb-active img) {
+  opacity: 1;
+}
+
+.priceContainer {
+  display: flex;
+  align-items: flex-end;
+  color: #2d2d2f;
+}
+
+.price {
+  font-family: Montserrat;
+  font-weight: 600;
+  font-size: 30px;
+  line-height: 28px;
+}
+
+.priceText {
+  font-size: 16px;
+  line-height: 18px;
+  white-space: nowrap;
+}
+
+.addToChartBtn {
+  width: 100%;
+  border: none;
+  border-radius: 50px;
+  background-color: #2967ff;
+  color: #ffffff;
+  font-family: Montserrat;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  padding: 13px 0;
+  margin-top: 16px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.productPropertiesContainer {
+  display: flex;
+  flex-direction: column;
+  margin-top: 16px;
+  white-space: pre;
+  row-gap: 2px;
+}
+
+.productVariationsSelector {
+  display: flex;
+  column-gap: 16px;
+  margin-top: 16px;
+}
+
+.productVariation {
+  padding: 8px 10px;
+  border-radius: 50px;
+  border: 1px solid #cecece;
+  color: #cecece;
+  cursor: pointer;
+}
+
+.productVariationActive {
+  border: 1px solid #2967ff;
+  color: #2967ff;
 }

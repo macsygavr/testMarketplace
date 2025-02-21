@@ -38,24 +38,8 @@ const Main = () => {
     }
   }, [selectedCategory]);
 
-  const handleAddToChart = (id: number) => {
-    const preparedId = String(id);
-
-    if (localStorage.getItem("chart")) {
-      localStorage.setItem(
-        "chart",
-        JSON.stringify([
-          ...[...JSON.parse(localStorage.getItem("chart") ?? "")],
-          preparedId,
-        ])
-      );
-    } else {
-      localStorage.setItem("chart", JSON.stringify([preparedId]));
-    }
-  };
-
   return (
-    <div className={css.container}>
+    <>
       <div className={css.categoriesBlock}>
         <div className={css.title}>Категории товаров</div>
         <div className={css.categoriesList}>
@@ -80,11 +64,10 @@ const Main = () => {
             key={item.id}
             id={item.id}
             name={item.name}
-            onClick={() => handleAddToChart(item.id)}
           />
         ))}
       </div>
-    </div>
+    </>
   );
 };
 

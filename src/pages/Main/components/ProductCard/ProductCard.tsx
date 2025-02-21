@@ -7,14 +7,14 @@ import {
   ProductVariation,
 } from "../../../../api/productsApi";
 import { useNavigate } from "react-router-dom";
+import { handleAddToChart } from "../../../../api/helpers";
 
 type Props = {
   id: number;
   name: string;
-  onClick: () => void;
 };
 
-const ProductCard: FC<Props> = ({ id, name, onClick }) => {
+const ProductCard: FC<Props> = ({ id, name }) => {
   const navigate = useNavigate();
   const [productImage, setProductImage] = useState<ProductImage[]>();
   const [productVariations, setProductVariations] =
@@ -25,9 +25,11 @@ const ProductCard: FC<Props> = ({ id, name, onClick }) => {
     getProductVariations(id).then((data) => setProductVariations(data));
   }, [id]);
 
-  const lowerPrice = useMemo(() => {
-    return productVariations?.sort((a, b) => a.price - b.price)?.[0].price;
+  const lowerPriceVariation = useMemo(() => {
+    return productVariations?.sort((a, b) => a.price - b.price)?.[0];
   }, [productVariations]);
+
+  const lowerPrice = lowerPriceVariation?.price;
 
   const lowerPriceWithoutDiscount =
     lowerPrice && (lowerPrice + (lowerPrice / 100) * 10).toFixed(0);
@@ -51,7 +53,7 @@ const ProductCard: FC<Props> = ({ id, name, onClick }) => {
           <span className={css.minPrice}>От {lowerPrice} ₽</span>
           <div className={css.previousPriceBlock}>
             <span className={css.previousPrice}>
-              {lowerPriceWithoutDiscount}
+              {lowerPriceWithoutDiscount} ₽
             </span>
             <span className={css.discount}>-10%</span>
           </div>
@@ -60,7 +62,12 @@ const ProductCard: FC<Props> = ({ id, name, onClick }) => {
           className={css.button}
           onClick={(e) => {
             e.stopPropagation();
-            onClick();
+            if (lowerPriceVariation) {
+              handleAddToChart({
+                productId: id,
+                variantId: lowerPriceVariation.id,
+              });
+            }
           }}
         >
           Добавить в корзину

@@ -13,3 +13,28 @@ export const fetchApiWrapper = ({
       console.log(err);
     });
 };
+
+export const handleAddToChart = ({
+  productId,
+  variantId,
+}: {
+  productId: number;
+  variantId: number;
+}) => {
+  const preparedItem = JSON.stringify({
+    productId,
+    variantId
+  });
+
+  if (localStorage.getItem("chart")) {
+    localStorage.setItem(
+      "chart",
+      JSON.stringify([
+        ...[...JSON.parse(localStorage.getItem("chart") ?? "")],
+        preparedItem,
+      ])
+    );
+  } else {
+    localStorage.setItem("chart", JSON.stringify([preparedItem]));
+  }
+};

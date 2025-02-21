@@ -21,8 +21,33 @@ export type ProductVariation = {
   stock: number;
 };
 
+export type ProductVariationPropertyValue = {
+  id: number;
+  product_variation_id: number;
+  product_variation_property_id: number;
+  product_variation_property_list_value_id: number;
+  value_float: number;
+  value_int: number;
+  value_string: string;
+};
+
+export type ProductVariationPropertyListValue = {
+  id: number;
+  product_variation_property_id: number;
+  value: string;
+};
+
+export type ProductVariationProperty = {
+  id: number;
+  name: string;
+  type: number;
+};
+
 export const getProducts = (): Promise<Product[]> =>
-  fetchApiWrapper({ path: "/Products"});
+  fetchApiWrapper({ path: "/Products" });
+
+export const getProductById = (id: number): Promise<Product> =>
+  fetchApiWrapper({ path: `/Products/${id}` });
 
 export const getProductImage = (productId: number): Promise<ProductImage[]> =>
   fetchApiWrapper({
@@ -38,9 +63,28 @@ export const getProductVariations = (
     params: `filter={"product_id":${productId}}`,
   });
 
-export const getProductVariationProperties = () =>
+// все возможные свойства
+export const getProductVariationProperty = (
+  propertyId: number
+): Promise<ProductVariationProperty> =>
   fetchApiWrapper({
-    path: `/ProductVariationProperties`,
+    path: `/ProductVariationProperties/${propertyId}`,
+  });
+
+export const getProductVariationPropertyListValue = (
+  listValueId?: number
+): Promise<ProductVariationPropertyListValue> =>
+  fetchApiWrapper({
+    path: `/ProductVariationPropertyListValues/${listValueId}`,
+  });
+
+// список свойств по айдишнику варианта продукта
+export const getProductVariationPropertyValues = (
+  productVariationIds: number[]
+): Promise<ProductVariationPropertyValue[]> =>
+  fetchApiWrapper({
+    path: `/ProductVariationPropertyValues`,
+    params: `filter={"product_variation_id":[${productVariationIds}]}`,
   });
 
 export const getProductsByCategoryId = (
