@@ -4,18 +4,18 @@ import BackIcon from "../../assets/icons/BackIcon";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Navigation, Thumbs } from "swiper/modules";
 import {
-  getProductById,
-  getProductImage,
+  getProducts,
+  getProductImages,
   Product as ProductType,
   ProductImage,
   getProductVariations,
   ProductVariation,
-  getProductVariationProperty,
   getProductVariationPropertyValues,
-  getProductVariationPropertyListValue,
   ProductVariationPropertyValue,
   ProductVariationProperty,
   ProductVariationPropertyListValue,
+  getProductVariationPropertyListValues,
+  getProductVariationProperties,
 } from "../../api/productsApi";
 import "swiper/css";
 import "swiper/css/free-mode";
@@ -32,7 +32,7 @@ export type ProductProperties = {
 };
 
 const Product = () => {
-  const { id } = useParams();
+  const { id, variantId } = useParams();
   const productId = Number(id);
   const navigate = useNavigate();
 
@@ -59,18 +59,18 @@ const Product = () => {
   >([]);
 
   useEffect(() => {
-    getProductById(productId).then(setProduct);
-    getProductImage(productId).then(setProductImage);
-
-    getProductVariations(productId).then((data) => {
-      setSelectedVariationId(data?.[0]?.id);
+    getProducts([productId]).then((data) => setProduct(data?.[0] ?? {}));
+    getProductImages([productId]).then(setProductImage);
+    getProductVariations([productId]).then((data) => {
+      setSelectedVariationId(variantId ? Number(variantId) : data?.[0]?.id);
       setProductVariations(data);
     });
-  }, [productId]);
+  }, [productId, variantId]);
 
   useEffect(() => {
     if (productVariations) {
       const propertyIds = productVariations.map((item) => item.id);
+
       getProductVariationPropertyValues(propertyIds).then((data) => {
         const sortedData = data.sort(
           (a, b) =>
@@ -83,25 +83,21 @@ const Product = () => {
 
   useEffect(() => {
     if (productVariationPropertyValues) {
-      const promisesProductVariationProperties =
-        productVariationPropertyValues.map((item) =>
-          getProductVariationProperty(item.product_variation_property_id)
-        );
-      const promisesProductVariationPropertyListValues =
-        productVariationPropertyValues
-          .filter((item) => item.product_variation_property_list_value_id)
-          .map((item) =>
-            getProductVariationPropertyListValue(
-              item.product_variation_property_list_value_id
-            )
-          );
-
-      Promise.all(promisesProductVariationProperties).then(
+      const productVariationPropertyIds = productVariationPropertyValues.map(
+        (item) => item.product_variation_property_id
+      );
+      getProductVariationProperties(productVariationPropertyIds).then(
         setProductVariationProperties
       );
-      Promise.all(promisesProductVariationPropertyListValues).then(
-        setProductVariationPropertyListValues
-      );
+
+      const productVariationPropertyListValuesIds =
+        productVariationPropertyValues
+          .filter((item) => item.product_variation_property_list_value_id)
+          .map((item) => item.product_variation_property_list_value_id);
+
+      getProductVariationPropertyListValues(
+        productVariationPropertyListValuesIds
+      ).then(setProductVariationPropertyListValues);
     }
   }, [productVariationPropertyValues]);
 

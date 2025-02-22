@@ -1,4 +1,10 @@
 .container {
-  border-left: 2px solid #F0F4FB;
+  border-left: 2px solid #f0f4fb;
   height: 100%;
+}
+
+@media screen and (max-width: 1280px) {
+  .container {
+    border-left: none;
+  }
 }

@@ -1,3 +1,85 @@
-.container {
+.pageHeaderContainer {
+  display: flex;
+  column-gap: 30px;
+}
 
+.clearBtn {
+  border: none;
+  background: none;
+
+  cursor: pointer;
+
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 18px;
+  color: #ff2d87;
+}
+
+.chartContainer {
+  display: flex;
+  flex-direction: column;
+  margin-top: 30px;
+  border: 1px solid #aec2ea;
+  border-radius: 20px;
+}
+
+.summaryContainer {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #aec2ea;
+  border-radius: 20px;
+  height: 100px;
+}
+
+.summaryInfoContainer {
+  display: flex;
+  column-gap: 80px;
+  padding: 25px 58px;
+}
+
+.priceContainer {
+  display: flex;
+  flex-direction: column;
+  white-space: nowrap;
+}
+
+.priceTitle {
+  font-size: 16px;
+  line-height: 22px;
+  color: #2d2d2f;
+}
+
+.price {
+  font-family: Montserrat;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 24px;
+  color: #2d2d2f;
+  margin-top: 5px;
+}
+
+.orderButton {
+  border: none;
+  border-radius: 50px;
+  background: #2967FF;
+  color: white;
+  padding: 16px 66px;
+  cursor: pointer;
+}
+
+.disablesOrderButton {
+  background: #c7c7c7;
+  cursor: default;
+}
+
+.chartListContainer {
+  padding: 40px 60px;
+}
+
+.chartListContainer > div:last-child {
+  border-bottom: none;
+}
+
+.summaryImage {
+  min-width: 165px;
 }

@@ -3,45 +3,59 @@ import css from "./index.module.css";
 import CategoryCard from "./components/CategoryCard/CategoryCard";
 import { Category, getCategories } from "../../api/categoriesApi";
 import {
-  getProducts,
+  getAllProducts,
+  getProductImages,
   getProductsByCategoryId,
+  getProductVariations,
   Product,
+  ProductImage,
+  ProductVariation,
 } from "../../api/productsApi";
 import ProductCard from "./components/ProductCard/ProductCard";
 import { getRandomDarkColor } from "./components/CategoryCard/helpers";
+import PageTittle from "../../components/PageTittle/PageTittle";
 
 const Main = () => {
   const [categories, setCategories] = useState<Category[]>();
   const [products, setProducts] = useState<Product[]>();
+  const [productsImages, setProductsImages] = useState<ProductImage[]>();
+  const [productsVariations, setProductsVariations] =
+    useState<ProductVariation[]>();
   const [selectedCategory, setSelectedCategory] = useState<number>();
-
-  const colors = useMemo(
-    () => (categories ?? []).map(() => getRandomDarkColor()),
-    [categories]
-  );
 
   useEffect(() => {
     getCategories().then((data) => {
       setCategories(data);
     });
 
-    getProducts().then((data) => {
+    getAllProducts().then((data) => {
       setProducts(data);
     });
   }, []);
 
   useEffect(() => {
     if (selectedCategory) {
-      getProductsByCategoryId(selectedCategory).then((data) =>
-        setProducts(data)
-      );
+      getProductsByCategoryId(selectedCategory).then(setProducts);
     }
   }, [selectedCategory]);
+
+  useEffect(() => {
+    if (products) {
+      const productsIds = products?.map((item) => item.id);
+      getProductImages(productsIds).then(setProductsImages);
+      getProductVariations(productsIds).then(setProductsVariations);
+    }
+  }, [products]);
+
+  const colors = useMemo(
+    () => (categories ?? []).map(() => getRandomDarkColor()),
+    [categories]
+  );
 
   return (
     <>
       <div className={css.categoriesBlock}>
-        <div className={css.title}>Категории товаров</div>
+        <PageTittle title="Категории товаров" />
         <div className={css.categoriesList}>
           {categories?.map((item, index) => (
             <CategoryCard
@@ -59,13 +73,26 @@ const Main = () => {
             В этой категории пока товаров нет
           </span>
         )}
-        {products?.map((item) => (
-          <ProductCard
-            key={item.id}
-            id={item.id}
-            name={item.name}
-          />
-        ))}
+        {productsImages &&
+          productsVariations &&
+          products?.map((item) => {
+            const images = productsImages.filter(
+              (el) => el.product_id === item.id
+            );
+            const variations = productsVariations.filter(
+              (el) => el.product_id === item.id
+            );
+
+            return (
+              <ProductCard
+                key={item.id}
+                productId={item.id}
+                productName={item.name}
+                productImages={images}
+                productVariations={variations}
+              />
+            );
+          })}
       </div>
     </>
   );

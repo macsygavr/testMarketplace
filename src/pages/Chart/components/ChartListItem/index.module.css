@@ -1,0 +1,74 @@
+.container {
+  display: flex;
+  justify-content: space-between;
+  min-height: 58px;
+  padding: 20px 0px;
+  border-bottom: 1px solid #aec2ea;
+}
+
+.leftContainer {
+  display: flex;
+  column-gap: 20px;
+}
+
+.img {
+  width: 57px;
+  height: 57px;
+  object-fit: contain;
+  cursor: pointer;
+}
+
+.productNameContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 380px;
+  cursor: pointer;
+}
+
+.name {
+  font-family: Montserrat;
+  font-size: 16px;
+  line-height: 22px;
+  color: #2d2d2f;
+}
+
+.variation {
+  font-family: Montserrat;
+  font-size: 16px;
+  line-height: 22px;
+  color: #2d2d2f;
+  color: #00000033;
+}
+
+.countContainer {
+  display: flex;
+  align-items: center;
+  border: 1px solid #aec2ea;
+  border-radius: 35px;
+  height: 44px;
+  padding: 12px;
+  box-sizing: border-box;
+}
+
+.count {
+  font-size: 16px;
+  line-height: 22px;
+  color: #2d2d2f;
+  cursor: default;
+  padding: 0px 26px;
+}
+
+.iconContainer {
+  display: flex;
+  cursor: pointer;
+}
+
+.price {
+  font-family: Montserrat;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 22px;
+  color: #2d2d2f;
+  white-space: nowrap;
+}

@@ -24,3 +24,9 @@
   white-space: nowrap;
   cursor: pointer;
 }
+
+@media screen and (max-width: 1280px) {
+  .container {
+    padding: 0;
+  }
+}

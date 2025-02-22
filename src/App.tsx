@@ -19,7 +19,7 @@ function App() {
           <PageWrapper>
             <Routes>
               <Route path="/" element={<Main />} />
-              <Route path="/product/:id" element={<Product />} />
+              <Route path="/product/:id/:variantId?" element={<Product />} />
               <Route path="/chart" element={<Chart />} />
               <Route path="/order" element={<Order />} />
               <Route path="/history" element={<History />} />

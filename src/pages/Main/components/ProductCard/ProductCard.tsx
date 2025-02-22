@@ -1,29 +1,23 @@
-import React, { FC, useEffect, useMemo, useState } from "react";
+import React, { FC, useMemo } from "react";
 import css from "./index.module.css";
-import {
-  getProductImage,
-  getProductVariations,
-  ProductImage,
-  ProductVariation,
-} from "../../../../api/productsApi";
+import { ProductImage, ProductVariation } from "../../../../api/productsApi";
 import { useNavigate } from "react-router-dom";
 import { handleAddToChart } from "../../../../api/helpers";
 
 type Props = {
-  id: number;
-  name: string;
+  productId: number;
+  productName: string;
+  productImages: ProductImage[];
+  productVariations: ProductVariation[];
 };
 
-const ProductCard: FC<Props> = ({ id, name }) => {
+const ProductCard: FC<Props> = ({
+  productId,
+  productName,
+  productImages,
+  productVariations,
+}) => {
   const navigate = useNavigate();
-  const [productImage, setProductImage] = useState<ProductImage[]>();
-  const [productVariations, setProductVariations] =
-    useState<ProductVariation[]>();
-
-  useEffect(() => {
-    getProductImage(id).then((data) => setProductImage(data));
-    getProductVariations(id).then((data) => setProductVariations(data));
-  }, [id]);
 
   const lowerPriceVariation = useMemo(() => {
     return productVariations?.sort((a, b) => a.price - b.price)?.[0];
@@ -35,7 +29,7 @@ const ProductCard: FC<Props> = ({ id, name }) => {
     lowerPrice && (lowerPrice + (lowerPrice / 100) * 10).toFixed(0);
 
   const handleGoToProductPage = () => {
-    navigate(`/product/${id}`);
+    navigate(`/product/${productId}`);
   };
 
   return (
@@ -43,10 +37,10 @@ const ProductCard: FC<Props> = ({ id, name }) => {
       <div className={css.upperBlock}>
         <img
           className={css.img}
-          src={productImage?.[0].image_url}
+          src={productImages?.[0]?.image_url}
           alt="Не удалось загрузить изображение"
         />
-        <span className={css.productName}>{name}</span>
+        <span className={css.productName}>{productName}</span>
       </div>
       <div>
         <div className={css.priceBlock}>
@@ -64,7 +58,7 @@ const ProductCard: FC<Props> = ({ id, name }) => {
             e.stopPropagation();
             if (lowerPriceVariation) {
               handleAddToChart({
-                productId: id,
+                productId,
                 variantId: lowerPriceVariation.id,
               });
             }
