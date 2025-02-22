@@ -25,6 +25,7 @@ import css from "./index.module.css";
 import cn from "classnames";
 import { handleAddToChart } from "../../api/helpers";
 import { filterProperties, isProductVariantsEqual } from "./helpers";
+import Button from "../../components/Button/Button";
 
 export type ProductProperties = {
   productVariationid?: number;
@@ -273,19 +274,20 @@ const Product = () => {
                   </div>
                 ))}
             </div>
-            <button
-              className={css.addToChartBtn}
-              onClick={() => {
-                if (selectedVariationId) {
-                  handleAddToChart({
-                    productId: productId,
-                    variantId: selectedVariationId,
-                  });
-                }
-              }}
-            >
-              В корзину за {price}
-            </button>
+            <div className={css.btnContainer}>
+              <Button
+                onClick={() => {
+                  if (selectedVariationId) {
+                    handleAddToChart({
+                      productId: productId,
+                      variantId: selectedVariationId,
+                    });
+                  }
+                }}
+              >
+                В корзину за {price}
+              </Button>
+            </div>
           </div>
         </div>
       </div>

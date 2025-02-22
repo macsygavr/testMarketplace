@@ -99,20 +99,9 @@
   white-space: nowrap;
 }
 
-.addToChartBtn {
-  width: 100%;
-  border: none;
-  border-radius: 50px;
-  background-color: #2967ff;
-  color: #ffffff;
-  font-family: Montserrat;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 24px;
-  padding: 13px 0;
+.btnContainer {
   margin-top: 16px;
-  white-space: nowrap;
-  cursor: pointer;
+  width: 100%;
 }
 
 .productPropertiesContainer {

@@ -58,18 +58,8 @@
   margin-top: 5px;
 }
 
-.orderButton {
-  border: none;
-  border-radius: 50px;
-  background: #2967FF;
-  color: white;
-  padding: 16px 66px;
-  cursor: pointer;
-}
-
-.disablesOrderButton {
-  background: #c7c7c7;
-  cursor: default;
+.orderBtnContainer {
+  width: 214px;
 }
 
 .chartListContainer {

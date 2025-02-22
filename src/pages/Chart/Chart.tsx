@@ -12,8 +12,8 @@ import {
   ProductImage,
   ProductVariation,
 } from "../../api/productsApi";
-import cn from "classnames";
 import { useNavigate } from "react-router-dom";
+import Button from "../../components/Button/Button";
 
 const Chart = () => {
   const navigate = useNavigate();
@@ -114,16 +114,14 @@ const Chart = () => {
                 className={css.price}
               >{`${totalPrice?.toLocaleString()} ₽`}</div>
             </div>
-            <button
-              className={cn(
-                css.orderButton,
-                disableOrderButton && css.disablesOrderButton
-              )}
-              disabled={disableOrderButton}
-              onClick={handleOrderButtonClick}
-            >
-              Оформить
-            </button>
+            <div className={css.orderBtnContainer}>
+              <Button
+                disabled={disableOrderButton}
+                onClick={handleOrderButtonClick}
+              >
+                Оформить
+              </Button>
+            </div>
           </div>
           <div className={css.summaryImage}>
             <ChartSummaryImage />
