@@ -43,10 +43,15 @@ export type ProductVariationProperty = {
   type: number;
 };
 
-export const getAllProducts = (): Promise<Product[]> =>
+export const getAllProducts = (
+  startRange: number,
+  categoryId?: number
+): Promise<Product[]> =>
   fetchApiWrapper({
     path: "/Products",
-    params: "range=[0,15]"
+    params: `${
+      categoryId ? `filter={"category_id": ${categoryId}}&` : ""
+    }range=[${startRange},${startRange + 15}]`,
   });
 
 export const getProducts = (productIds?: number[]): Promise<Product[]> =>
@@ -95,12 +100,4 @@ export const getProductVariationPropertyValues = (
   fetchApiWrapper({
     path: `/ProductVariationPropertyValues`,
     params: `filter={"product_variation_id":[${productVariationIds}]}`,
-  });
-
-export const getProductsByCategoryId = (
-  categoryId: number
-): Promise<Product[]> =>
-  fetchApiWrapper({
-    path: "/Products",
-    params: `filter={"category_id": ${categoryId}}&range=[0,15]`,
   });
