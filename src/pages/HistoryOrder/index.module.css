@@ -1,0 +1,9 @@
+.pageTitleContainer {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.listContainer {
+  display: flex;
+  flex-direction: column;
+}

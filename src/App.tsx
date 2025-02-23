@@ -9,6 +9,7 @@ import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 import SideMenuWrapper from "./components/SideMenuWrapper/SideMenuWrapper";
 import PageWrapper from "./components/PageWrapper/PageWrapper";
+import HistoryOrder from "./pages/HistoryOrder/HistoryOrder";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
               <Route path="/chart" element={<Chart />} />
               <Route path="/order" element={<Order />} />
               <Route path="/history" element={<History />} />
+              <Route path="/history-order/:id" element={<HistoryOrder />} />
             </Routes>
           </PageWrapper>
         </SideMenuWrapper>

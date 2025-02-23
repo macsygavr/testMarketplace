@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import BackIcon from "../../assets/icons/BackIcon";
+import { useParams } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Navigation, Thumbs } from "swiper/modules";
 import {
@@ -26,6 +25,7 @@ import cn from "classnames";
 import { handleAddToChart } from "../../api/helpers";
 import { filterProperties, isProductVariantsEqual } from "./helpers";
 import Button from "../../components/Button/Button";
+import BackButton from "../../components/BackButton/BackButton";
 
 export type ProductProperties = {
   productVariationid?: number;
@@ -35,7 +35,6 @@ export type ProductProperties = {
 const Product = () => {
   const { id, variantId } = useParams();
   const productId = Number(id);
-  const navigate = useNavigate();
 
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
 
@@ -196,24 +195,16 @@ const Product = () => {
     }
   }, [productVariationPropertyValues]);
 
-  const handleBackButton = () => {
-    navigate(-1);
-  };
-
-  const price = `${productVariations
-    ?.find((item) => item.id === selectedVariationId)
-    ?.price?.toLocaleString()}₽`;
+  const price = `${(
+    productVariations?.find((item) => item.id === selectedVariationId)?.price ??
+    0
+  ).toLocaleString()}₽`;
 
   const selectedPropertyValues = productIdenticalProperties;
 
   return (
     <>
-      <div className={css.backBtnContainer} onClick={handleBackButton}>
-        <div className={css.icon}>
-          <BackIcon />
-        </div>
-        <span className={css.backBtnText}>Назад</span>
-      </div>
+      <BackButton />
       <div className={css.productContainer}>
         <span className={css.productName}>{product?.name}</span>
         <div className={css.detailInfoContainer}>

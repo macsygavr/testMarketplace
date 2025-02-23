@@ -7,13 +7,18 @@ import Button from "../../components/Button/Button";
 import { useNavigate } from "react-router-dom";
 import { getProductVariations, ProductVariation } from "../../api/productsApi";
 import { ChartItem } from "../../api/helpers";
+import { generateOrderNumber } from "./helpers";
+import { format } from "date-fns";
 
-export type OrderValues = {
+export type OrderItem = {
   date: string;
   time: string;
   address: string;
   name: string;
   phone: string;
+  totalPrice: number;
+  orderId: string;
+  orderDate: string;
   products: ChartItem[];
 };
 
@@ -33,13 +38,11 @@ const Order = () => {
     const chartValues = localStorage.getItem("chart");
 
     if (chartValues) {
-      const parsedValues: ChartItem[] = JSON.parse(chartValues).map(
-        (item: string) => JSON.parse(item)
-      );
-
-      setChartValues(parsedValues);
+      setChartValues(JSON.parse(chartValues));
+    } else {
+      navigate("/");
     }
-  }, []);
+  }, [navigate]);
 
   useEffect(() => {
     if (chartValues) {
@@ -61,12 +64,18 @@ const Order = () => {
 
   const handleOrder = () => {
     if (chartValues) {
-      const orderValues: OrderValues = {
+      const orderId = generateOrderNumber();
+      const orderDate = format(new Date(), "dd.MM.yyyy");
+
+      const order: OrderItem = {
         date,
         time,
         name,
         address,
         phone,
+        totalPrice: totalPrice ?? 0,
+        orderId,
+        orderDate,
         products: chartValues,
       };
 
@@ -77,11 +86,11 @@ const Order = () => {
           "history",
           JSON.stringify([
             ...[...JSON.parse(localStorage.getItem("history") ?? "")],
-            orderValues,
+            order,
           ])
         );
       } else {
-        localStorage.setItem("history", JSON.stringify([orderValues]));
+        localStorage.setItem("history", JSON.stringify([order]));
       }
 
       navigate("/history");

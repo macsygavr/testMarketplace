@@ -29,9 +29,7 @@ const Chart = () => {
     const chartValues = localStorage.getItem("chart");
 
     if (chartValues) {
-      const parsedValues: ChartItem[] = JSON.parse(chartValues).map(
-        (item: string) => JSON.parse(item)
-      );
+      const parsedValues: ChartItem[] = JSON.parse(chartValues);
 
       const hashMap: Record<string, number> = {};
 
@@ -85,7 +83,7 @@ const Chart = () => {
 
   const handleClearChart = () => {
     localStorage.removeItem("chart");
-    setList([])
+    setList([]);
   };
 
   const handleUpdatePrice = (price: number) => {
@@ -94,6 +92,16 @@ const Chart = () => {
 
   const handleOrderButtonClick = () => {
     navigate("/order");
+  };
+
+  const handleGoToProductPage = ({
+    productId,
+    variantId,
+  }: {
+    productId: number;
+    variantId: number;
+  }) => {
+    navigate(`/product/${productId}/${variantId}`);
   };
 
   const disableOrderButton = totalPrice === 0;
@@ -151,6 +159,12 @@ const Chart = () => {
                   productVariation={variation}
                   totalPrice={totalPrice}
                   onUpdatePrice={handleUpdatePrice}
+                  onClick={() =>
+                    handleGoToProductPage({
+                      productId: item.productId,
+                      variantId: item.variantId,
+                    })
+                  }
                 />
               );
             })}

@@ -13,7 +13,7 @@ body {
   font-style: normal;
   font-weight: 100;
   src: url("../public/fonts/Raleway/Raleway-Thin.ttf") format("truetype");
-  font-display: swap;
+  font-display: block;
 }
 
 @font-face {
@@ -21,7 +21,7 @@ body {
   font-style: normal;
   font-weight: 200;
   src: url("../public/fonts/Raleway/Raleway-ExtraLight.ttf") format("truetype");
-  font-display: swap;
+  font-display: block;
 }
 
 @font-face {
@@ -29,7 +29,7 @@ body {
   font-style: normal;
   font-weight: 300;
   src: url("../public/fonts/Raleway/Raleway-Light.ttf") format("truetype");
-  font-display: swap;
+  font-display: block;
 }
 
 @font-face {
@@ -37,7 +37,7 @@ body {
   font-style: normal;
   font-weight: 400;
   src: url("../public/fonts/Raleway/Raleway-Regular.ttf") format("truetype");
-  font-display: swap;
+  font-display: block;
 }
 
 @font-face {
@@ -45,7 +45,7 @@ body {
   font-style: normal;
   font-weight: 500;
   src: url("../public/fonts/Raleway/Raleway-Medium.ttf") format("truetype");
-  font-display: swap;
+  font-display: block;
 }
 
 @font-face {
@@ -53,7 +53,7 @@ body {
   font-style: normal;
   font-weight: 600;
   src: url("../public/fonts/Raleway/Raleway-SemiBold.ttf") format("truetype");
-  font-display: swap;
+  font-display: block;
 }
 
 @font-face {
@@ -61,7 +61,7 @@ body {
   font-style: normal;
   font-weight: 700;
   src: url("../public/fonts/Raleway/Raleway-Bold.ttf") format("truetype");
-  font-display: swap;
+  font-display: block;
 }
 
 @font-face {
@@ -69,7 +69,7 @@ body {
   font-style: normal;
   font-weight: 800;
   src: url("../public/fonts/Raleway/Raleway-ExtraBold.ttf") format("truetype");
-  font-display: swap;
+  font-display: block;
 }
 
 @font-face {
@@ -77,7 +77,7 @@ body {
   font-style: normal;
   font-weight: 900;
   src: url("../public/fonts/Raleway/Raleway-Black.ttf") format("truetype");
-  font-display: swap;
+  font-display: block;
 }
 
 @font-face {
@@ -85,7 +85,7 @@ body {
   font-style: italic;
   font-weight: 100;
   src: url("../public/fonts/Raleway/Raleway-ThinItalic.ttf") format("truetype");
-  font-display: swap;
+  font-display: block;
 }
 
 @font-face {
@@ -93,7 +93,7 @@ body {
   font-style: italic;
   font-weight: 200;
   src: url("../public/fonts/Raleway/Raleway-ExtraLightItalic.ttf") format("truetype");
-  font-display: swap;
+  font-display: block;
 }
 
 @font-face {
@@ -101,7 +101,7 @@ body {
   font-style: italic;
   font-weight: 300;
   src: url("../public/fonts/Raleway/Raleway-LightItalic.ttf") format("truetype");
-  font-display: swap;
+  font-display: block;
 }
 
 @font-face {
@@ -109,7 +109,7 @@ body {
   font-style: italic;
   font-weight: 400;
   src: url("../public/fonts/Raleway/Raleway-Italic.ttf") format("truetype");
-  font-display: swap;
+  font-display: block;
 }
 
 @font-face {
@@ -117,7 +117,7 @@ body {
   font-style: italic;
   font-weight: 500;
   src: url("../public/fonts/Raleway/Raleway-MediumItalic.ttf") format("truetype");
-  font-display: swap;
+  font-display: block;
 }
 
 @font-face {
@@ -125,7 +125,7 @@ body {
   font-style: italic;
   font-weight: 600;
   src: url("../public/fonts/Raleway/Raleway-SemiBoldItalic.ttf") format("truetype");
-  font-display: swap;
+  font-display: block;
 }
 
 @font-face {
@@ -133,7 +133,7 @@ body {
   font-style: italic;
   font-weight: 700;
   src: url("../public/fonts/Raleway/Raleway-BoldItalic.ttf") format("truetype");
-  font-display: swap;
+  font-display: block;
 }
 
 @font-face {
@@ -141,7 +141,7 @@ body {
   font-style: italic;
   font-weight: 800;
   src: url("../public/fonts/Raleway/Raleway-ExtraBoldItalic.ttf") format("truetype");
-  font-display: swap;
+  font-display: block;
 }
 
 @font-face {
@@ -149,7 +149,7 @@ body {
   font-style: italic;
   font-weight: 900;
   src: url("../public/fonts/Raleway/Raleway-BlackItalic.ttf") format("truetype");
-  font-display: swap;
+  font-display: block;
 }
 
 @font-face {
@@ -157,7 +157,7 @@ body {
   font-style: normal;
   font-weight: 100;
   src: url("../public/fonts/Montserrat/Montserrat-Thin.ttf") format("truetype");
-  font-display: swap;
+  font-display: block;
 }
 
 @font-face {
@@ -165,7 +165,7 @@ body {
   font-style: normal;
   font-weight: 200;
   src: url("../public/fonts/Montserrat/Montserrat-ExtraLight.ttf") format("truetype");
-  font-display: swap;
+  font-display: block;
 }
 
 @font-face {
@@ -173,7 +173,7 @@ body {
   font-style: normal;
   font-weight: 300;
   src: url("../public/fonts/Montserrat/Montserrat-Light.ttf") format("truetype");
-  font-display: swap;
+  font-display: block;
 }
 
 @font-face {
@@ -181,7 +181,7 @@ body {
   font-style: normal;
   font-weight: 400;
   src: url("../public/fonts/Montserrat/Montserrat-Regular.ttf") format("truetype");
-  font-display: swap;
+  font-display: block;
 }
 
 @font-face {
@@ -189,7 +189,7 @@ body {
   font-style: normal;
   font-weight: 500;
   src: url("../public/fonts/Montserrat/Montserrat-Medium.ttf") format("truetype");
-  font-display: swap;
+  font-display: block;
 }
 
 @font-face {
@@ -197,7 +197,7 @@ body {
   font-style: normal;
   font-weight: 600;
   src: url("../public/fonts/Montserrat/Montserrat-SemiBold.ttf") format("truetype");
-  font-display: swap;
+  font-display: block;
 }
 
 @font-face {
@@ -205,7 +205,7 @@ body {
   font-style: normal;
   font-weight: 700;
   src: url("../public/fonts/Montserrat/Montserrat-Bold.ttf") format("truetype");
-  font-display: swap;
+  font-display: block;
 }
 
 @font-face {
@@ -213,7 +213,7 @@ body {
   font-style: normal;
   font-weight: 800;
   src: url("../public/fonts/Montserrat/Montserrat-ExtraBold.ttf") format("truetype");
-  font-display: swap;
+  font-display: block;
 }
 
 @font-face {
@@ -221,7 +221,7 @@ body {
   font-style: normal;
   font-weight: 900;
   src: url("../public/fonts/Montserrat/Montserrat-Black.ttf") format("truetype");
-  font-display: swap;
+  font-display: block;
 }
 
 @font-face {
@@ -229,7 +229,7 @@ body {
   font-style: italic;
   font-weight: 100;
   src: url("../public/fonts/Montserrat/Montserrat-ThinItalic.ttf") format("truetype");
-  font-display: swap;
+  font-display: block;
 }
 
 @font-face {
@@ -237,7 +237,7 @@ body {
   font-style: italic;
   font-weight: 200;
   src: url("../public/fonts/Montserrat/Montserrat-ExtraLightItalic.ttf") format("truetype");
-  font-display: swap;
+  font-display: block;
 }
 
 @font-face {
@@ -245,7 +245,7 @@ body {
   font-style: italic;
   font-weight: 300;
   src: url("../public/fonts/Montserrat/Montserrat-LightItalic.ttf") format("truetype");
-  font-display: swap;
+  font-display: block;
 }
 
 @font-face {
@@ -253,7 +253,7 @@ body {
   font-style: italic;
   font-weight: 400;
   src: url("../public/fonts/Montserrat/Montserrat-Italic.ttf") format("truetype");
-  font-display: swap;
+  font-display: block;
 }
 
 @font-face {
@@ -261,7 +261,7 @@ body {
   font-style: italic;
   font-weight: 500;
   src: url("../public/fonts/Montserrat/Montserrat-MediumItalic.ttf") format("truetype");
-  font-display: swap;
+  font-display: block;
 }
 
 @font-face {
@@ -269,7 +269,7 @@ body {
   font-style: italic;
   font-weight: 600;
   src: url("../public/fonts/Montserrat/Montserrat-SemiBoldItalic.ttf") format("truetype");
-  font-display: swap;
+  font-display: block;
 }
 
 @font-face {
@@ -277,7 +277,7 @@ body {
   font-style: italic;
   font-weight: 700;
   src: url("../public/fonts/Montserrat/Montserrat-BoldItalic.ttf") format("truetype");
-  font-display: swap;
+  font-display: block;
 }
 
 @font-face {
@@ -285,7 +285,7 @@ body {
   font-style: italic;
   font-weight: 800;
   src: url("../public/fonts/Montserrat/Montserrat-ExtraBoldItalic.ttf") format("truetype");
-  font-display: swap;
+  font-display: block;
 }
 
 @font-face {
@@ -293,5 +293,5 @@ body {
   font-style: italic;
   font-weight: 900;
   src: url("../public/fonts/Montserrat/Montserrat-BlackItalic.ttf") format("truetype");
-  font-display: swap;
+  font-display: block;
 }

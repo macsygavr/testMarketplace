@@ -13,11 +13,7 @@
   cursor: pointer;
 }
 
-.addressContainer {
-  display: flex;
-  align-items: center;
-  column-gap: 5px;
-
+.historyBtnContainer {
   margin-right: 20px;
 
   font-weight: 400;
@@ -25,6 +21,7 @@
   line-height: 20px;
   color: #727280;
   white-space: nowrap;
+  cursor: pointer;
 }
 
 .searchInputContainer {

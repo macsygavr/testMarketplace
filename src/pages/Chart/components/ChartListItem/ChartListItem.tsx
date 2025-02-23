@@ -14,7 +14,6 @@ import {
 import MinusIcon from "../../../../assets/icons/MinusIcon";
 import PlusIcon from "../../../../assets/icons/PlusIcon";
 import TrashIcon from "../../../../assets/icons/TrashIcon";
-import { useNavigate } from "react-router-dom";
 
 type Props = {
   chartItem: ChartItem;
@@ -23,6 +22,7 @@ type Props = {
   productVariation?: ProductVariation;
   totalPrice?: number;
   onUpdatePrice: (price: number) => void;
+  onClick?: () => void;
 };
 
 const ChartListItem: FC<Props> = ({
@@ -32,8 +32,8 @@ const ChartListItem: FC<Props> = ({
   productVariation,
   totalPrice,
   onUpdatePrice,
+  onClick,
 }) => {
-  const navigate = useNavigate()
   const [count, setCount] = useState<number>(chartItem.count ?? 1);
   const productVariationPrice = productVariation?.price;
 
@@ -57,17 +57,20 @@ const ChartListItem: FC<Props> = ({
     onUpdatePrice((totalPrice ?? 0) - (productVariationPrice ?? 0) * count);
   };
 
-  const handleGoToProductPage = () => {
-    navigate(`/product/${chartItem.productId}/${chartItem.variantId}`)
-  }
-
   return (
     <div className={css.container}>
       <div className={css.leftContainer}>
-        <img onClick={handleGoToProductPage} className={css.img} src={productImage?.image_url} alt="" />
-        <div className={css.productNameContainer} onClick={handleGoToProductPage}>
+        <img
+          onClick={onClick}
+          className={css.img}
+          src={productImage?.image_url}
+          alt=""
+        />
+        <div className={css.productNameContainer} onClick={onClick}>
           <span className={css.name}>{product?.name}</span>
-          <span className={css.variation}>{`Вариант: ${productVariation?.id}`}</span>
+          <span
+            className={css.variation}
+          >{`Вариант: ${productVariation?.id}`}</span>
         </div>
         <div className={css.countContainer}>
           <div className={css.iconContainer} onClick={handleMinus}>

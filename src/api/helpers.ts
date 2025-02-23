@@ -21,21 +21,21 @@ export const fetchApiWrapper = ({
 };
 
 export const handleAddToChart = ({ productId, variantId }: ChartItem) => {
-  const preparedItem = JSON.stringify({
+  const chartItem = {
     productId,
     variantId,
-  });
+  };
 
   if (localStorage.getItem("chart")) {
     localStorage.setItem(
       "chart",
       JSON.stringify([
         ...[...JSON.parse(localStorage.getItem("chart") ?? "")],
-        preparedItem,
+        chartItem,
       ])
     );
   } else {
-    localStorage.setItem("chart", JSON.stringify([preparedItem]));
+    localStorage.setItem("chart", JSON.stringify([chartItem]));
   }
 };
 
@@ -46,9 +46,7 @@ export const handleRemoveOnePieceFromChart = ({
   const chartValues = localStorage.getItem("chart");
 
   if (chartValues) {
-    const parsedValues: ChartItem[] = JSON.parse(chartValues).map(
-      (item: string) => JSON.parse(item)
-    );
+    const parsedValues: ChartItem[] = JSON.parse(chartValues);
 
     const index = parsedValues.findIndex(
       (item) => item.productId === productId && item.variantId === variantId
@@ -56,11 +54,7 @@ export const handleRemoveOnePieceFromChart = ({
 
     parsedValues.splice(index, 1);
 
-    const preparedValues = JSON.stringify(
-      parsedValues.map((item) => JSON.stringify(item))
-    );
-
-    localStorage.setItem("chart", preparedValues);
+    localStorage.setItem("chart", JSON.stringify(parsedValues));
   }
 };
 
@@ -71,18 +65,12 @@ export const handleRemoveAllPiecesFromChart = ({
   const chartValues = localStorage.getItem("chart");
 
   if (chartValues) {
-    const parsedValues: ChartItem[] = JSON.parse(chartValues).map(
-      (item: string) => JSON.parse(item)
-    );
+    const parsedValues: ChartItem[] = JSON.parse(chartValues);
 
     const filteredValues = parsedValues.filter(
       (item) => !(item.productId === productId && item.variantId === variantId)
     );
 
-    const preparedValues = JSON.stringify(
-      filteredValues.map((item) => JSON.stringify(item))
-    );
-
-    localStorage.setItem("chart", preparedValues);
+    localStorage.setItem("chart", JSON.stringify(filteredValues));
   }
 };

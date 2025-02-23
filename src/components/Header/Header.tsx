@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import css from "./index.module.css";
-import AddressIcon from "../../assets/icons/AddressIcon";
 import ChartIcon from "../../assets/icons/ChartIcon";
 import SearchIcon from "../../assets/icons/SearchIcon";
 import { useNavigate } from "react-router-dom";
@@ -17,14 +16,17 @@ const Header = () => {
     navigate("/");
   };
 
+  const handleGoToOrderPage = () => {
+    navigate("/history");
+  };
+
   return (
     <div className={css.container}>
       <div className={css.iconText} onClick={handleGoToMainPage}>
         React
       </div>
-      <div className={css.addressContainer}>
-        <AddressIcon />
-        Александровск-Са...
+      <div className={css.historyBtnContainer} onClick={handleGoToOrderPage}>
+        История заказов
       </div>
       <div className={css.searchInputContainer}>
         <input

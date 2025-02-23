@@ -1,0 +1,35 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+  padding: 20px;
+  border-radius: 32px;
+  border: 1px solid #aec2ea;
+  cursor: pointer;
+}
+
+.title {
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 14px;
+  color: #727280;
+}
+
+.value {
+  font-family: Montserrat;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 14px;
+  color: #2d2d2f;
+}
+
+.block {
+  display: flex;
+  flex-direction: column;
+  row-gap: 3px;
+}
+
+.horisontalBlockContainer {
+  display: flex;
+  column-gap: 20px;
+}

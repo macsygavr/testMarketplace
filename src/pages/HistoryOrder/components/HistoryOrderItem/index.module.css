@@ -1,0 +1,41 @@
+.container {
+  display: flex;
+  column-gap: 20px;
+  padding: 10px 0px;
+  border-bottom: 1px solid #aec2ea;
+}
+
+.infoContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.productName {
+  font-family: Montserrat;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 14px;
+  color: #727280;
+}
+
+.productPriceCountContainer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.price {
+  font-family: Montserrat;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 22px;
+  color: #2d2d2f;
+}
+
+.count {
+  font-family: Montserrat;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  color: #727280;
+}
