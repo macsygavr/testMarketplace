@@ -1,14 +1,29 @@
 import React, { useEffect, useState } from "react";
 import css from "./index.module.css";
 import PageTittle from "../../components/PageTittle/PageTittle";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import BackButton from "../../components/BackButton/BackButton";
 import { ChartItem } from "../../api/helpers";
 import { OrderItem } from "../Order/Order";
+import HistoryOrderItem from "./components/HistoryOrderItem/HistoryOrderItem";
+import {
+  getProductImages,
+  getProducts,
+  getProductVariations,
+  Product,
+  ProductImage,
+  ProductVariation,
+} from "../../api/productsApi";
 
 const HistoryOrder = () => {
   const { id: orderId } = useParams();
-  const [productList, setProductList] = useState<ChartItem[]>();
+  const navigate = useNavigate();
+
+  const [productList, setProductList] = useState<ChartItem[]>([]);
+  const [products, setProducts] = useState<Product[]>();
+  const [productsImages, setProductImages] = useState<ProductImage[]>();
+  const [productsVariations, setProductVariations] =
+    useState<ProductVariation[]>();
 
   useEffect(() => {
     if (orderId) {
@@ -20,10 +35,29 @@ const HistoryOrder = () => {
           (item) => item.orderId === orderId
         );
 
-        setProductList(currentOrder?.products);
+        setProductList(currentOrder?.products ?? []);
       }
     }
   }, [orderId]);
+
+  useEffect(() => {
+    if (productList.length > 0) {
+      const productIds = productList.map((item) => item.productId);
+      getProducts(productIds).then(setProducts);
+      getProductImages(productIds).then(setProductImages);
+      getProductVariations(productIds).then(setProductVariations);
+    }
+  }, [productList]);
+
+  const handleGoToProductPage = ({
+    productId,
+    variantId,
+  }: {
+    productId: number;
+    variantId: number;
+  }) => {
+    navigate(`/product/${productId}/${variantId}`);
+  };
 
   return (
     <>
@@ -32,7 +66,37 @@ const HistoryOrder = () => {
         <PageTittle title={`Заказ №${orderId}`} />
       </div>
       <PageTittle title={"Товары"} />
-      <div className={css.listContainer}></div>
+      <div className={css.listContainer}>
+        {products &&
+          productsImages &&
+          productsVariations &&
+          productList.map((item, index) => {
+            const product = products.find((el) => el.id === item.productId);
+            const image = productsImages.find(
+              (el) => el.product_id === item.productId
+            );
+            const variation = productsVariations.find(
+              (el) =>
+                el.product_id === item.productId && el.id === item.variantId
+            );
+
+            return (
+              <HistoryOrderItem
+                key={`${item.productId}=${item.variantId}=${index}`}
+                productName={product?.name}
+                productImage={image}
+                productVariation={variation}
+                count={item.count}
+                onClick={() =>
+                  handleGoToProductPage({
+                    productId: item.productId,
+                    variantId: item.variantId,
+                  })
+                }
+              />
+            );
+          })}
+      </div>
     </>
   );
 };

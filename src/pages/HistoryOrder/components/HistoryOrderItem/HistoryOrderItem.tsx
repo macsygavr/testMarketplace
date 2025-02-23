@@ -1,31 +1,39 @@
 import React, { FC } from "react";
 import css from "./index.module.css";
+import { ProductImage, ProductVariation } from "../../../../api/productsApi";
 
 type Props = {
-  imageUrl: string;
-  productName: string;
-  productVariation: string;
-  price: string;
-  count: number;
+  productName?: string;
+  productImage?: ProductImage;
+  productVariation?: ProductVariation;
+  count?: number;
   onClick: () => void;
 };
 
 const HistoryOrderItem: FC<Props> = ({
-  imageUrl,
+  productImage,
   productName,
   productVariation,
-  price,
   count,
   onClick,
 }) => {
   return (
     <div className={css.container}>
-      <img src={imageUrl} alt="" />
+      <img
+        className={css.img}
+        src={productImage?.image_url}
+        alt=""
+        onClick={onClick}
+      />
       <div className={css.infoContainer}>
-        <span className={css.productName}></span>
+        <span className={css.productName} onClick={onClick}>
+          {`${productName} (Вариант: ${productVariation?.id})`}
+        </span>
         <div className={css.productPriceCountContainer}>
-          <span className={css.price}></span>
-          <span className={css.count}></span>
+          <span
+            className={css.price}
+          >{`${productVariation?.price?.toLocaleString()}₽ / шт.`}</span>
+          <span className={css.count}>{`${count} шт.`}</span>
         </div>
       </div>
     </div>

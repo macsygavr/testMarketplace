@@ -31,28 +31,7 @@ const Chart = () => {
     if (chartValues) {
       const parsedValues: ChartItem[] = JSON.parse(chartValues);
 
-      const hashMap: Record<string, number> = {};
-
-      parsedValues.forEach((item) => {
-        const key = JSON.stringify(item);
-
-        if (hashMap[key]) {
-          hashMap[key] = hashMap[key] + 1;
-        } else {
-          hashMap[key] = 1;
-        }
-      });
-
-      const resultArr: ChartItem[] = [];
-
-      for (let key in hashMap) {
-        resultArr.push({
-          ...JSON.parse(key),
-          count: hashMap[key],
-        });
-      }
-
-      setList(resultArr);
+      setList(parsedValues);
     }
   }, []);
 

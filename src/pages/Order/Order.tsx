@@ -81,13 +81,12 @@ const Order = () => {
 
       localStorage.removeItem("chart");
 
-      if (localStorage.getItem("history")) {
+      const history = localStorage.getItem("history");
+
+      if (history) {
         localStorage.setItem(
           "history",
-          JSON.stringify([
-            ...[...JSON.parse(localStorage.getItem("history") ?? "")],
-            order,
-          ])
+          JSON.stringify([...JSON.parse(history ?? ""), order])
         );
       } else {
         localStorage.setItem("history", JSON.stringify([order]));

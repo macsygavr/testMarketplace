@@ -5,10 +5,18 @@
   border-bottom: 1px solid #aec2ea;
 }
 
+.img {
+  min-width: 57px;
+  height: 57px;
+  object-fit: contain;
+  cursor: pointer;
+}
+
 .infoContainer {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  width: 100%;
 }
 
 .productName {
@@ -17,6 +25,7 @@
   font-size: 12px;
   line-height: 14px;
   color: #727280;
+  cursor: pointer;
 }
 
 .productPriceCountContainer {

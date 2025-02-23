@@ -21,40 +21,45 @@ export const fetchApiWrapper = ({
 };
 
 export const handleAddToChart = ({ productId, variantId }: ChartItem) => {
-  const chartItem = {
-    productId,
-    variantId,
-  };
+  const chart = localStorage.getItem("chart");
 
-  if (localStorage.getItem("chart")) {
-    localStorage.setItem(
-      "chart",
-      JSON.stringify([
-        ...[...JSON.parse(localStorage.getItem("chart") ?? "")],
-        chartItem,
-      ])
-    );
-  } else {
-    localStorage.setItem("chart", JSON.stringify([chartItem]));
-  }
-};
+  if (chart) {
+    const parsedChart: ChartItem[] = JSON.parse(chart);
 
-export const handleRemoveOnePieceFromChart = ({
-  productId,
-  variantId,
-}: ChartItem) => {
-  const chartValues = localStorage.getItem("chart");
-
-  if (chartValues) {
-    const parsedValues: ChartItem[] = JSON.parse(chartValues);
-
-    const index = parsedValues.findIndex(
+    let index = parsedChart.findIndex(
       (item) => item.productId === productId && item.variantId === variantId
     );
 
-    parsedValues.splice(index, 1);
-
-    localStorage.setItem("chart", JSON.stringify(parsedValues));
+    if (parsedChart[index]) {
+      parsedChart[index] = {
+        ...parsedChart[index],
+        count: (parsedChart[index].count ?? 0) + 1,
+      };
+      localStorage.setItem("chart", JSON.stringify([...parsedChart]));
+    } else {
+      localStorage.setItem(
+        "chart",
+        JSON.stringify([
+          ...parsedChart,
+          {
+            productId,
+            variantId,
+            count: 1,
+          },
+        ])
+      );
+    }
+  } else {
+    localStorage.setItem(
+      "chart",
+      JSON.stringify([
+        {
+          productId,
+          variantId,
+          count: 1,
+        },
+      ])
+    );
   }
 };
 
@@ -72,5 +77,31 @@ export const handleRemoveAllPiecesFromChart = ({
     );
 
     localStorage.setItem("chart", JSON.stringify(filteredValues));
+  }
+};
+
+export const handleRemoveOnePieceFromChart = ({
+  productId,
+  variantId,
+}: ChartItem) => {
+  const chartValues = localStorage.getItem("chart");
+
+  if (chartValues) {
+    const parsedValues: ChartItem[] = JSON.parse(chartValues);
+
+    let index = parsedValues.findIndex(
+      (item) => item.productId === productId && item.variantId === variantId
+    );
+
+    parsedValues[index] = {
+      ...parsedValues[index],
+      count: (parsedValues[index].count ?? 0) - 1,
+    };
+
+    if (parsedValues[index].count === 0) {
+      handleRemoveAllPiecesFromChart(parsedValues[index]);
+    }
+
+    localStorage.setItem("chart", JSON.stringify(parsedValues));
   }
 };
