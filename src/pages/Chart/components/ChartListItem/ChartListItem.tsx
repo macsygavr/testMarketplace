@@ -70,7 +70,7 @@ const ChartListItem: FC<Props> = ({
           <span className={css.name}>{product?.name}</span>
           <span
             className={css.variation}
-          >{`Вариант: ${productVariation?.id}`}</span>
+          >{`${chartItem.uniqProperties?.join(' / ') ?? ''}`}</span>
         </div>
         <div className={css.countContainer}>
           <div className={css.iconContainer} onClick={handleMinus}>

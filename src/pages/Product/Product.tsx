@@ -250,8 +250,9 @@ const Product = () => {
             </div>
             <div className={css.productVariationsSelector}>
               {!isAllVariantsEqual &&
-                productUniqProperties?.map((item) => (
+                productUniqProperties?.map((item, index) => (
                   <div
+                    key={`${item.productVariationid}-${index}`}
                     className={cn(
                       css.productVariation,
                       selectedVariationId === item.productVariationid &&
@@ -269,9 +270,13 @@ const Product = () => {
               <Button
                 onClick={() => {
                   if (selectedVariationId) {
+                    const uniqProperties = productUniqProperties.find(
+                      (item) => item.productVariationid === selectedVariationId
+                    )?.values;
                     handleAddToChart({
                       productId: productId,
                       variantId: selectedVariationId,
+                      uniqProperties,
                     });
                   }
                 }}

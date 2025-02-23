@@ -32,11 +32,11 @@ const HistoryItem: FC<Props> = ({
       <div className={css.horisontalBlockContainer}>
         <div className={css.block}>
           <span className={css.title}>Кол-во товаров</span>
-          <span className={css.value}>{products.length}</span>
+          <span className={css.value}>{products.length} шт.</span>
         </div>
         <div className={css.block}>
           <span className={css.title}>Стоимость заказа</span>
-          <span className={css.value}>{totalPrice}</span>
+          <span className={css.value}>{totalPrice.toLocaleString()}₽</span>
         </div>
         <div className={css.block}>
           <span className={css.title}>Адрес доставки</span>

@@ -6,6 +6,7 @@ type Props = {
   productName?: string;
   productImage?: ProductImage;
   productVariation?: ProductVariation;
+  productVariationName?: string[];
   count?: number;
   onClick: () => void;
 };
@@ -14,6 +15,7 @@ const HistoryOrderItem: FC<Props> = ({
   productImage,
   productName,
   productVariation,
+  productVariationName,
   count,
   onClick,
 }) => {
@@ -27,7 +29,9 @@ const HistoryOrderItem: FC<Props> = ({
       />
       <div className={css.infoContainer}>
         <span className={css.productName} onClick={onClick}>
-          {`${productName} (Вариант: ${productVariation?.id})`}
+          {`${productName} ${
+            productVariationName ? `(${productVariationName.join(" / ")})` : ""
+          }`}
         </span>
         <div className={css.productPriceCountContainer}>
           <span

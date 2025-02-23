@@ -4,6 +4,7 @@ export type ChartItem = {
   productId: number;
   variantId: number;
   count?: number;
+  uniqProperties?: string[];
 };
 
 export const fetchApiWrapper = ({
@@ -20,7 +21,7 @@ export const fetchApiWrapper = ({
     });
 };
 
-export const handleAddToChart = ({ productId, variantId }: ChartItem) => {
+export const handleAddToChart = ({ productId, variantId, uniqProperties }: ChartItem) => {
   const chart = localStorage.getItem("chart");
 
   if (chart) {
@@ -44,6 +45,7 @@ export const handleAddToChart = ({ productId, variantId }: ChartItem) => {
           {
             productId,
             variantId,
+            uniqProperties,
             count: 1,
           },
         ])
@@ -56,6 +58,7 @@ export const handleAddToChart = ({ productId, variantId }: ChartItem) => {
         {
           productId,
           variantId,
+          uniqProperties,
           count: 1,
         },
       ])

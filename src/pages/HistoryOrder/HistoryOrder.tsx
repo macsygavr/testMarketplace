@@ -84,6 +84,7 @@ const HistoryOrder = () => {
               <HistoryOrderItem
                 key={`${item.productId}=${item.variantId}=${index}`}
                 productName={product?.name}
+                productVariationName={item.uniqProperties}
                 productImage={image}
                 productVariation={variation}
                 count={item.count}
