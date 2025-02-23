@@ -1,10 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import css from "./index.module.css";
 import PageTittle from "../../components/PageTittle/PageTittle";
 import BlockTitle from "./components/BlockTitle/BlockTitle";
 import cn from "classnames";
 import Button from "../../components/Button/Button";
 import { useNavigate } from "react-router-dom";
+import { getProductVariations, ProductVariation } from "../../api/productsApi";
+import { ChartItem } from "../../api/helpers";
+
+export type OrderValues = {
+  date: string;
+  time: string;
+  address: string;
+  name: string;
+  phone: string;
+  products: ChartItem[];
+};
 
 const Order = () => {
   const navigate = useNavigate();
@@ -14,8 +25,67 @@ const Order = () => {
   const [name, setName] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
 
+  const [chartValues, setChartValues] = useState<ChartItem[]>();
+  const [productsVariations, setProductVariations] =
+    useState<ProductVariation[]>();
+
+  useEffect(() => {
+    const chartValues = localStorage.getItem("chart");
+
+    if (chartValues) {
+      const parsedValues: ChartItem[] = JSON.parse(chartValues).map(
+        (item: string) => JSON.parse(item)
+      );
+
+      setChartValues(parsedValues);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (chartValues) {
+      const productIds = chartValues.map((item) => item.productId);
+      getProductVariations(productIds).then(setProductVariations);
+    }
+  }, [chartValues]);
+
+  const totalPrice = useMemo(() => {
+    if (chartValues && productsVariations) {
+      const priceList = chartValues.map(
+        (item) =>
+          productsVariations.find((el) => el.id === item.variantId)?.price
+      );
+
+      return (priceList as number[]).reduce((acc, item) => acc + item, 0);
+    }
+  }, [chartValues, productsVariations]);
+
   const handleOrder = () => {
-    navigate("/history");
+    if (chartValues) {
+      const orderValues: OrderValues = {
+        date,
+        time,
+        name,
+        address,
+        phone,
+        products: chartValues,
+      };
+
+      localStorage.removeItem("chart");
+
+      if (localStorage.getItem("history")) {
+        localStorage.setItem(
+          "history",
+          JSON.stringify([
+            ...[...JSON.parse(localStorage.getItem("history") ?? "")],
+            orderValues,
+          ])
+        );
+      } else {
+        localStorage.setItem("history", JSON.stringify([orderValues]));
+      }
+
+      navigate("/history");
+    }
   };
 
   const disabled = !(date && time && address && name && phone);
@@ -89,7 +159,9 @@ const Order = () => {
               <span className={css.orderSummaryItemText}>
                 Стоимость товаров:
               </span>
-              <span className={css.orderSummaryItemText}>200 584₽</span>
+              <span
+                className={css.orderSummaryItemText}
+              >{`${totalPrice?.toLocaleString()}₽`}</span>
             </div>
             <div className={css.orderSummaryItemContainer}>
               <span className={css.orderSummaryItemText}>
@@ -101,7 +173,9 @@ const Order = () => {
               <span className={cn(css.orderSummaryItemText, css.orderSumm)}>
                 Итого:
               </span>
-              <span className={css.orderSummValue}>200 784₽</span>
+              <span className={css.orderSummValue}>{`${(
+                (totalPrice ?? 0) + 200
+              ).toLocaleString()}₽`}</span>
             </div>
           </div>
           <Button disabled={disabled} onClick={handleOrder}>

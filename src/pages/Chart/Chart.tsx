@@ -85,6 +85,7 @@ const Chart = () => {
 
   const handleClearChart = () => {
     localStorage.removeItem("chart");
+    setList([])
   };
 
   const handleUpdatePrice = (price: number) => {
