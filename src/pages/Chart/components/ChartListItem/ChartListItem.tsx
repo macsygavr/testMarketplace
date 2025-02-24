@@ -1,65 +1,48 @@
-import React, { FC, useState } from "react";
+import React, { FC } from "react";
 import css from "./index.module.css";
-import {
-  Product,
-  ProductImage,
-  ProductVariation,
-} from "../../../../api/productsApi";
-import {
-  ChartItem,
-  handleAddToChart,
-  handleRemoveAllPiecesFromChart,
-  handleRemoveOnePieceFromChart,
-} from "../../../../api/helpers";
 import MinusIcon from "../../../../assets/icons/MinusIcon";
 import PlusIcon from "../../../../assets/icons/PlusIcon";
 import TrashIcon from "../../../../assets/icons/TrashIcon";
+import { ChartItem, ProductImage } from "../../../../redux/types";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../../redux/store/store";
+import {
+  addToChart,
+  removeAllProductItemsFromChart,
+  removeOneProductItemFromChart,
+} from "../../../../redux/reducers/chart";
 
 type Props = {
   chartItem: ChartItem;
-  product?: Product;
+  productName?: string;
   productImage?: ProductImage;
-  productVariation?: ProductVariation;
-  totalPrice?: number;
-  onUpdatePrice: (price: number) => void;
   onClick?: () => void;
 };
 
 /** Элемент корзины */
 const ChartListItem: FC<Props> = ({
   chartItem,
-  product,
+  productName,
   productImage,
-  productVariation,
-  totalPrice,
-  onUpdatePrice,
   onClick,
 }) => {
-  // количество товара в корзине
-  const [count, setCount] = useState<number>(chartItem.count ?? 1);
-  const productVariationPrice = productVariation?.price;
+  const dispatch = useDispatch<AppDispatch>();
 
   // добавляем в корзину еще одну единицу товара
   const handlePlus = () => {
-    setCount((old) => old + 1);
-    handleAddToChart(chartItem);
-    onUpdatePrice((totalPrice ?? 0) + (productVariationPrice ?? 0));
+    dispatch(addToChart(chartItem));
   };
 
   // удаляем из корзины одну единицу товара
   const handleMinus = () => {
-    if (count > 0) {
-      setCount((old) => old - 1);
-      handleRemoveOnePieceFromChart(chartItem);
-      onUpdatePrice((totalPrice ?? 0) - (productVariationPrice ?? 0));
+    if ((chartItem.count ?? 0) > 0) {
+      dispatch(removeOneProductItemFromChart(chartItem));
     }
   };
 
   // удаляем из корзины всю позицию целиком
   const handleDeleteItem = () => {
-    setCount(0);
-    handleRemoveAllPiecesFromChart(chartItem);
-    onUpdatePrice((totalPrice ?? 0) - (productVariationPrice ?? 0) * count);
+    dispatch(removeAllProductItemsFromChart(chartItem));
   };
 
   return (
@@ -73,7 +56,7 @@ const ChartListItem: FC<Props> = ({
             alt=""
           />
           <div className={css.productNameContainer} onClick={onClick}>
-            <span className={css.name}>{product?.name}</span>
+            <span className={css.name}>{productName}</span>
             <span className={css.variation}>{`${
               chartItem.uniqProperties?.join(" / ") ?? ""
             }`}</span>
@@ -85,14 +68,13 @@ const ChartListItem: FC<Props> = ({
           <div className={css.iconContainer} onClick={handleMinus}>
             <MinusIcon />
           </div>
-          <span className={css.count}>{count}</span>
+          <span className={css.count}>{chartItem.count}</span>
           <div className={css.iconContainer} onClick={handlePlus}>
             <PlusIcon />
           </div>
         </div>
         <span className={css.price}>
-          {productVariation &&
-            `${(productVariation?.price * count).toLocaleString()} ₽`}
+          {(chartItem.priceForItem * (chartItem.count ?? 0)).toLocaleString()} ₽
         </span>
         <div className={css.trashIconContainer} onClick={handleDeleteItem}>
           <TrashIcon />

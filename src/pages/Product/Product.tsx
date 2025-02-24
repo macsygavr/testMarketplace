@@ -3,18 +3,12 @@ import { useParams } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Navigation, Thumbs } from "swiper/modules";
 import {
-  getProducts,
-  getProductImages,
-  Product as ProductType,
-  ProductImage,
-  getProductVariations,
-  ProductVariation,
   getProductVariationPropertyValues,
-  ProductVariationPropertyValue,
-  ProductVariationProperty,
-  ProductVariationPropertyListValue,
   getProductVariationPropertyListValues,
   getProductVariationProperties,
+  getProducts,
+  getProductImages,
+  getProductVariations,
 } from "../../api/productsApi";
 import "swiper/css";
 import "swiper/css/free-mode";
@@ -22,10 +16,21 @@ import "swiper/css/navigation";
 import "swiper/css/thumbs";
 import css from "./index.module.css";
 import cn from "classnames";
-import { handleAddToChart } from "../../api/helpers";
 import { filterProperties, isProductVariantsEqual } from "./helpers";
 import Button from "../../components/Button/Button";
 import BackButton from "../../components/BackButton/BackButton";
+import {
+  ProductImage,
+  ProductVariationPropertyListValue,
+  ProductVariationPropertyValue,
+  Product as ProductType,
+  ProductVariationProperty,
+  ProductVariation,
+} from "../../redux/types";
+import { useDispatch } from "react-redux";
+import { AppDispatch, RootState } from "../../redux/store/store";
+import { useSelector } from "react-redux";
+import { addToChart } from "../../redux/reducers/chart";
 
 // сущность свойств товара - айдишник варианта товара и список его свойств в формате "имя: значение"
 export type ProductProperties = {
@@ -36,15 +41,22 @@ export type ProductProperties = {
 /** Страница подробной информации о товаре */
 const Product = () => {
   // получаем id товара и варианта из урла
-  const { id, variantId } = useParams();
+  const { id, variantId: variantIdString } = useParams();
   const productId = Number(id);
+  const variantId = Number(variantIdString);
+
+  // получаем все нужные состояния из редакса
+  const dispatch = useDispatch<AppDispatch>();
+  const { products, productsImages, productsVariations } = useSelector(
+    (state: RootState) => state.products
+  );
 
   // стейт для карусели
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
 
   // стейты товаров
   const [product, setProduct] = useState<ProductType>();
-  const [productImage, setProductImage] = useState<ProductImage[]>([]);
+  const [productImages, setProductImages] = useState<ProductImage[]>([]);
   const [productVariations, setProductVariations] =
     useState<ProductVariation[]>();
   const [selectedVariationId, setSelectedVariationId] = useState<number>();
@@ -71,13 +83,38 @@ const Product = () => {
 
   // получаем данные о товаре, изображения и варианты товара
   useEffect(() => {
-    getProducts([productId]).then((data) => setProduct(data?.[0] ?? {}));
-    getProductImages([productId]).then(setProductImage);
-    getProductVariations([productId]).then((data) => {
-      setSelectedVariationId(variantId ? Number(variantId) : data?.[0]?.id);
-      setProductVariations(data);
-    });
-  }, [productId, variantId]);
+    // ищем данные в сторе
+    const product = products.find((item) => item.id === productId);
+    const productImages = productsImages.filter(
+      (item) => item.product_id === productId
+    );
+    const productVariations = productsVariations.filter(
+      (item) => item.product_id === productId
+    );
+
+    // если есть в хранилище, устанавливаем как значение, а иначе загружаем заново
+    if (product) {
+      setProduct(product);
+    } else {
+      getProducts([productId]).then((data) => setProduct(data?.[0] ?? {}));
+    }
+
+    if (productImages.length) {
+      setProductImages(productImages);
+    } else {
+      getProductImages([productId]).then(setProductImages);
+    }
+
+    if (productVariations.length) {
+      setSelectedVariationId(variantId ? variantId : productVariations?.[0].id);
+      setProductVariations(productVariations);
+    } else {
+      getProductVariations([productId]).then((data) => {
+        setSelectedVariationId(variantId ? variantId : data?.[0]?.id);
+        setProductVariations(data);
+      });
+    }
+  }, [products, productsImages, productsVariations, productId, variantId]);
 
   // получаем все свойства для каждого из вариантов товара и сортируем
   useEffect(() => {
@@ -146,7 +183,7 @@ const Product = () => {
 
         // значение свойства
         let propertyValue;
-        
+
         // получаем значение свойства из соответствующего места исходя из типа свойства
         switch (property?.type) {
           case 0:
@@ -219,7 +256,7 @@ const Product = () => {
     productVariations,
   ]);
 
-  // определяем все ли свойства у всех вариантов одинаковые 
+  // определяем все ли свойства у всех вариантов одинаковые
   // и в зависимости от этого отображаем/скрываем блок с выбором вариантов
   const isAllVariantsEqual = useMemo(() => {
     if (productVariationPropertyValues) {
@@ -228,10 +265,11 @@ const Product = () => {
   }, [productVariationPropertyValues]);
 
   // цена для выбранного варианта
-  const price = `${(
+  const price =
     productVariations?.find((item) => item.id === selectedVariationId)?.price ??
-    0
-  ).toLocaleString()}₽`;
+    0;
+
+  const priceString = `${price.toLocaleString()}₽`;
 
   return (
     <>
@@ -251,7 +289,7 @@ const Product = () => {
               modules={[FreeMode, Navigation, Thumbs]}
               className={css.mySwiper}
             >
-              {productImage?.map((item) => (
+              {productImages?.map((item) => (
                 <SwiperSlide key={item.id}>
                   <img src={item.image_url} alt="" />
                 </SwiperSlide>
@@ -264,7 +302,7 @@ const Product = () => {
               modules={[FreeMode, Navigation, Thumbs]}
               className={css.mySwiper2}
             >
-              {productImage?.map((item) => (
+              {productImages?.map((item) => (
                 <SwiperSlide key={item.id}>
                   <img src={item.image_url} alt="" />
                 </SwiperSlide>
@@ -273,7 +311,7 @@ const Product = () => {
           </div>
           <div className={css.infoContainer}>
             <div className={css.priceContainer}>
-              <span className={css.price}>{price}&nbsp;</span>
+              <span className={css.price}>{priceString}&nbsp;</span>
               <span className={css.priceText}>за шт.</span>
             </div>
             <div className={css.productPropertiesContainer}>
@@ -301,22 +339,25 @@ const Product = () => {
               <Button
                 onClick={() => {
                   if (selectedVariationId) {
-                    // получаем уникальные свойства выбранного варианта товара 
+                    // получаем уникальные свойства выбранного варианта товара
                     // и сохраняем в корзину для отображения в дальнейшем
                     const uniqProperties = productUniqProperties.find(
                       (item) => item.productVariationid === selectedVariationId
                     )?.values;
-                    
+
                     // добавляем товар в корзину
-                    handleAddToChart({
-                      productId: productId,
-                      variantId: selectedVariationId,
-                      uniqProperties,
-                    });
+                    dispatch(
+                      addToChart({
+                        productId: productId,
+                        variantId: selectedVariationId,
+                        priceForItem: price,
+                        uniqProperties,
+                      })
+                    );
                   }
                 }}
               >
-                В корзину за {price}
+                В корзину за {priceString}
               </Button>
             </div>
           </div>

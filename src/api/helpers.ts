@@ -1,11 +1,6 @@
-const baseApiPath = "https://test2.sionic.ru/api";
+import { ChartItem } from "../redux/types";
 
-export type ChartItem = {
-  productId: number;
-  variantId: number;
-  count?: number;
-  uniqProperties?: string[];
-};
+const baseApiPath = "https://test2.sionic.ru/api";
 
 export const fetchApiWrapper = ({
   path,
@@ -21,7 +16,7 @@ export const fetchApiWrapper = ({
     });
 };
 
-export const handleAddToChart = ({ productId, variantId, uniqProperties }: ChartItem) => {
+export const handleAddToChart = ({ productId, variantId, priceForItem, uniqProperties }: ChartItem) => {
   const chart = localStorage.getItem("chart");
 
   if (chart) {
@@ -31,6 +26,7 @@ export const handleAddToChart = ({ productId, variantId, uniqProperties }: Chart
       (item) => item.productId === productId && item.variantId === variantId
     );
 
+    // если корзина есть и товар уже есть в корзине, увеличиваем каунтер на 1
     if (parsedChart[index]) {
       parsedChart[index] = {
         ...parsedChart[index],
@@ -38,6 +34,7 @@ export const handleAddToChart = ({ productId, variantId, uniqProperties }: Chart
       };
       localStorage.setItem("chart", JSON.stringify([...parsedChart]));
     } else {
+      // если если корзина есть, но переданного товара нет - добавляем
       localStorage.setItem(
         "chart",
         JSON.stringify([
@@ -45,6 +42,7 @@ export const handleAddToChart = ({ productId, variantId, uniqProperties }: Chart
           {
             productId,
             variantId,
+            priceForItem,
             uniqProperties,
             count: 1,
           },
@@ -52,12 +50,14 @@ export const handleAddToChart = ({ productId, variantId, uniqProperties }: Chart
       );
     }
   } else {
+    // если корзины нет, то создаем и добавляем первый товар
     localStorage.setItem(
       "chart",
       JSON.stringify([
         {
           productId,
           variantId,
+          priceForItem,
           uniqProperties,
           count: 1,
         },
@@ -75,6 +75,7 @@ export const handleRemoveAllPiecesFromChart = ({
   if (chartValues) {
     const parsedValues: ChartItem[] = JSON.parse(chartValues);
 
+    // очищаем корзину от переданного товара
     const filteredValues = parsedValues.filter(
       (item) => !(item.productId === productId && item.variantId === variantId)
     );
@@ -96,14 +97,11 @@ export const handleRemoveOnePieceFromChart = ({
       (item) => item.productId === productId && item.variantId === variantId
     );
 
+    // уменьшаем каунтер на 1
     parsedValues[index] = {
       ...parsedValues[index],
       count: (parsedValues[index].count ?? 0) - 1,
     };
-
-    if (parsedValues[index].count === 0) {
-      handleRemoveAllPiecesFromChart(parsedValues[index]);
-    }
 
     localStorage.setItem("chart", JSON.stringify(parsedValues));
   }

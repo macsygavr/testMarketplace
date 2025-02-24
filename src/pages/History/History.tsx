@@ -36,6 +36,7 @@ const History = () => {
     <>
       <PageTittle title="История заказов" />
       <div className={css.orderListContainer}>
+        {!historyList?.length && "Здесь пока пусто"}
         {historyList?.map((item) => (
           <HistoryItem
             key={item.orderId}

@@ -1,14 +1,17 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import css from "./index.module.css";
 import PageTittle from "../../components/PageTittle/PageTittle";
 import BlockTitle from "./components/BlockTitle/BlockTitle";
 import cn from "classnames";
 import Button from "../../components/Button/Button";
 import { useNavigate } from "react-router-dom";
-import { getProductVariations, ProductVariation } from "../../api/productsApi";
-import { ChartItem } from "../../api/helpers";
 import { generateOrderNumber } from "./helpers";
 import { format } from "date-fns";
+import { ChartItem } from "../../redux/types";
+import { useDispatch } from "react-redux";
+import { AppDispatch, RootState } from "../../redux/store/store";
+import { resetChart } from "../../redux/reducers/chart";
+import { useSelector } from "react-redux";
 
 export type OrderItem = {
   date: string;
@@ -25,6 +28,9 @@ export type OrderItem = {
 const Order = () => {
   const navigate = useNavigate();
 
+  const dispatch = useDispatch<AppDispatch>();
+  const { chart, totalPrice } = useSelector((state: RootState) => state.chart);
+
   // сейты с данными для оформления заказа
   const [date, setDate] = useState<string>("");
   const [time, setTime] = useState<string>("");
@@ -32,46 +38,16 @@ const Order = () => {
   const [name, setName] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
 
-  // стейты товаров и их вариантов
-  const [chartValues, setChartValues] = useState<ChartItem[]>();
-  const [productsVariations, setProductVariations] =
-    useState<ProductVariation[]>();
-
-  // получаем товары из local storage, если корзина пуста, то редиректим на главную страницу
+  // Если корзина пуста, то редиректим на главную страницу
   useEffect(() => {
-    const chartValues = localStorage.getItem("chart");
-
-    if (chartValues) {
-      setChartValues(JSON.parse(chartValues));
-    } else {
+    if (!chart) {
       navigate("/");
     }
-  }, [navigate]);
-
-  // получаем варианты продуктов
-  useEffect(() => {
-    if (chartValues) {
-      const productIds = chartValues.map((item) => item.productId);
-      getProductVariations(productIds).then(setProductVariations);
-    }
-  }, [chartValues]);
-
-  // получаем суммарную стоимость всех товаров из корзины
-  const totalPrice = useMemo(() => {
-    if (chartValues && productsVariations) {
-      const priceList = chartValues.map(
-        (item) =>
-          (productsVariations.find((el) => el.id === item.variantId)?.price ??
-            0) * (item.count ?? 0)
-      );
-
-      return (priceList as number[]).reduce((acc, item) => acc + item, 0);
-    }
-  }, [chartValues, productsVariations]);
+  }, [chart, navigate]);
 
   // функция отправки заказа
   const handleOrder = () => {
-    if (chartValues) {
+    if (chart) {
       // генерируем номер заказа
       const orderId = generateOrderNumber();
       // получаем текущую дату
@@ -86,12 +62,11 @@ const Order = () => {
         totalPrice: totalPrice ?? 0,
         orderId,
         orderDate,
-        products: chartValues,
+        products: chart,
       };
 
       // чистим корзину в localstorage
-      localStorage.removeItem("chart");
-
+      dispatch(resetChart());
 
       const history = localStorage.getItem("history");
 

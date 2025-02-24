@@ -3,17 +3,19 @@ import css from "./index.module.css";
 import PageTittle from "../../components/PageTittle/PageTittle";
 import { useNavigate, useParams } from "react-router-dom";
 import BackButton from "../../components/BackButton/BackButton";
-import { ChartItem } from "../../api/helpers";
 import { OrderItem } from "../Order/Order";
 import HistoryOrderItem from "./components/HistoryOrderItem/HistoryOrderItem";
 import {
   getProductImages,
   getProducts,
   getProductVariations,
+} from "../../api/productsApi";
+import {
+  ChartItem,
   Product,
   ProductImage,
   ProductVariation,
-} from "../../api/productsApi";
+} from "../../redux/types";
 
 /** Страница подробной информации об истории заказа */
 const HistoryOrder = () => {
@@ -25,7 +27,7 @@ const HistoryOrder = () => {
   const [products, setProducts] = useState<Product[]>();
   const [productsImages, setProductImages] = useState<ProductImage[]>();
   const [productsVariations, setProductVariations] =
-    useState<ProductVariation[]>(); 
+    useState<ProductVariation[]>();
 
   // получаем оформленные в прошлом заказы из local storage и находим соответствующий номеру заказа из урла
   useEffect(() => {
@@ -52,17 +54,6 @@ const HistoryOrder = () => {
       getProductVariations(productIds).then(setProductVariations);
     }
   }, [productList]);
-
-  // функция перехода на страницу соответствующего варианта товара
-  const handleGoToProductPage = ({
-    productId,
-    variantId,
-  }: {
-    productId: number;
-    variantId: number;
-  }) => {
-    navigate(`/product/${productId}/${variantId}`);
-  };
 
   return (
     <>
@@ -93,11 +84,9 @@ const HistoryOrder = () => {
                 productImage={image}
                 productVariation={variation}
                 count={item.count}
+                // функция перехода на страницу соответствующего варианта товара
                 onClick={() =>
-                  handleGoToProductPage({
-                    productId: item.productId,
-                    variantId: item.variantId,
-                  })
+                  navigate(`/product/${item.productId}/${item.variantId}`)
                 }
               />
             );

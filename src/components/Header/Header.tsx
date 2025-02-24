@@ -1,12 +1,24 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import css from "./index.module.css";
 import ChartIcon from "../../assets/icons/ChartIcon";
 import SearchIcon from "../../assets/icons/SearchIcon";
 import { useNavigate } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
+import { RootState } from "../../redux/store/store";
+import { useSelector } from "react-redux";
 
 const Header = () => {
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
+
+  const { chart } = useSelector((state: RootState) => state.chart);
+
+  const count = useMemo(
+    () =>
+      chart
+        .map((item) => item.count)
+        .reduce((acc, item) => (acc ?? 0) + (item ?? 0), 0),
+    [chart]
+  );
 
   const [searchValue, setSearchValue] = useState("");
   const navigate = useNavigate();
@@ -43,7 +55,7 @@ const Header = () => {
               <div className={css.chartIcon}>
                 <ChartIcon />
               </div>
-              <div className={css.chartCounter}>0</div>
+              <div className={css.chartCounter}>{count}</div>
             </div>
             <div className={css.imgContainer}>
               <img className={css.mainImg} src={"/avatar.png"} alt={""} />
@@ -70,7 +82,7 @@ const Header = () => {
             <div className={css.chartIcon}>
               <ChartIcon />
             </div>
-            <div className={css.chartCounter}>0</div>
+            <div className={css.chartCounter}>{count}</div>
           </div>
           <div className={css.imgContainer}>
             <img className={css.mainImg} src={"/avatar.png"} alt={""} />

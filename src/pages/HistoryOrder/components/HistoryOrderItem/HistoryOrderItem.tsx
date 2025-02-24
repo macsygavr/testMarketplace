@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import css from "./index.module.css";
-import { ProductImage, ProductVariation } from "../../../../api/productsApi";
+import { ProductImage, ProductVariation } from "../../../../redux/types";
 
 type Props = {
   productName?: string;

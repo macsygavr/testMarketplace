@@ -2,96 +2,42 @@ import React, { useEffect, useState } from "react";
 import css from "./index.module.css";
 import PageTittle from "../../components/PageTittle/PageTittle";
 import ChartSummaryImage from "../../assets/icons/ChartSummaryImage";
-import { ChartItem } from "../../api/helpers";
 import ChartListItem from "./components/ChartListItem/ChartListItem";
-import {
-  getProductImages,
-  getProducts,
-  getProductVariations,
-  Product,
-  ProductImage,
-  ProductVariation,
-} from "../../api/productsApi";
+import { getProductImages, getProducts } from "../../api/productsApi";
 import { useNavigate } from "react-router-dom";
 import Button from "../../components/Button/Button";
+import { Product, ProductImage } from "../../redux/types";
+import { useDispatch } from "react-redux";
+import { AppDispatch, RootState } from "../../redux/store/store";
+import { resetChart } from "../../redux/reducers/chart";
+import { useSelector } from "react-redux";
 
 /** Страница корзины */
 const Chart = () => {
   const navigate = useNavigate();
 
-  const [list, setList] = useState<ChartItem[]>([]);
-  const [totalPrice, setTotalPrice] = useState<number>(0);
+  const dispatch = useDispatch<AppDispatch>();
+  const { chart, totalPrice } = useSelector((state: RootState) => state.chart);
+
   const [products, setProducts] = useState<Product[]>();
   const [productsImages, setProductImages] = useState<ProductImage[]>();
-  const [productsVariations, setProductVariations] =
-    useState<ProductVariation[]>();
 
-  // получаем данные о всех добавленных в корзину товарах из local storage
+  // получаем данные о товаре и изображения для всех товаров из корзины
   useEffect(() => {
-    const chartValues = localStorage.getItem("chart");
-
-    if (chartValues) {
-      const parsedValues: ChartItem[] = JSON.parse(chartValues);
-
-      setList(parsedValues);
-    }
-  }, []);
-
-  // получаем данные о товаре, изображение и варианты для всех товаров из корзины
-  useEffect(() => {
-    if (list.length > 0) {
-      const productIds = list.map((item) => item.productId);
+    if (chart.length > 0) {
+      const productIds = chart.map((item) => item.productId);
       getProducts(productIds).then(setProducts);
       getProductImages(productIds).then(setProductImages);
-      getProductVariations(productIds).then(setProductVariations);
     }
-  }, [list]);
-
-  // получаем суммарную стоимовть всех товаров
-  useEffect(() => {
-    if (list && productsVariations) {
-      const prices = list.map((item) => {
-        const price = productsVariations.find(
-          (el) => el.id === item.variantId
-        )?.price;
-
-        return (price ?? 0) * (item.count ?? 0);
-      });
-
-      const total = (prices as number[]).reduce((acc, item) => acc + item, 0);
-
-      setTotalPrice(total);
-    }
-  }, [list, productsVariations]);
+  }, [chart]);
 
   // функция полной очистки корзины
-  const handleClearChart = () => {
-    localStorage.removeItem("chart");
-    setList([]);
-  };
-
-  // функция обновления цены
-  const handleUpdatePrice = (price: number) => {
-    setTotalPrice(price);
-  };
+  const handleClearChart = () => dispatch(resetChart());
 
   // функция перехода на страницу оформления заказа
   const handleOrderButtonClick = () => {
     navigate("/order");
   };
-
-  // функция перехода на страницу подробной информации о конкретном варианте товара
-  const handleGoToProductPage = ({
-    productId,
-    variantId,
-  }: {
-    productId: number;
-    variantId: number;
-  }) => {
-    navigate(`/product/${productId}/${variantId}`);
-  };
-
-  const disableOrderButton = totalPrice === 0;
 
   return (
     <>
@@ -112,7 +58,7 @@ const Chart = () => {
             </div>
             <div className={css.orderBtnContainer}>
               <Button
-                disabled={disableOrderButton}
+                disabled={totalPrice === 0}
                 onClick={handleOrderButtonClick}
               >
                 Оформить
@@ -124,33 +70,24 @@ const Chart = () => {
           </div>
         </div>
         <div className={css.chartListContainer}>
+          {!chart.length && "Здесь пока пусто"}
           {products &&
             productsImages &&
-            productsVariations &&
-            list.map((item, index) => {
+            chart.map((item, index) => {
               const product = products.find((el) => el.id === item.productId);
               const image = productsImages.find(
                 (el) => el.product_id === item.productId
-              );
-              const variation = productsVariations.find(
-                (el) =>
-                  el.product_id === item.productId && el.id === item.variantId
               );
 
               return (
                 <ChartListItem
                   key={`${item.productId}=${item.variantId}=${index}`}
                   chartItem={item}
-                  product={product}
+                  productName={product?.name}
                   productImage={image}
-                  productVariation={variation}
-                  totalPrice={totalPrice}
-                  onUpdatePrice={handleUpdatePrice}
+                  // функция перехода на страницу подробной информации о конкретном варианте товара
                   onClick={() =>
-                    handleGoToProductPage({
-                      productId: item.productId,
-                      variantId: item.variantId,
-                    })
+                    navigate(`/product/${item.productId}/${item.variantId}`)
                   }
                 />
               );

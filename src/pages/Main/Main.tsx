@@ -1,41 +1,46 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import css from "./index.module.css";
 import CategoryCard from "./components/CategoryCard/CategoryCard";
-import { Category, getCategories } from "../../api/categoriesApi";
-import {
-  getAllProducts,
-  getProductImages,
-  getProductVariations,
-  Product,
-  ProductImage,
-  ProductVariation,
-} from "../../api/productsApi";
 import ProductCard from "./components/ProductCard/ProductCard";
 import { getRandomDarkColor } from "./components/CategoryCard/helpers";
 import PageTittle from "../../components/PageTittle/PageTittle";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../redux/store/store";
+import { fetchCategories } from "../../redux/reducers/categories";
+import {
+  fetchAllProducts,
+  fetchProductImages,
+  fetchProductVariations,
+  incrementStartRange,
+  resetProducts,
+} from "../../redux/reducers/products";
 
 /** Cтраница с карточками всех товаров и категориями */
 const Main = () => {
   const loaderRef = useRef<HTMLDivElement | null>(null);
 
-  // стейты товаров и категорий
-  const [categories, setCategories] = useState<Category[]>();
+  // получаем все нужные состояния из редакса
+  const dispatch = useDispatch<AppDispatch>();
+  const { categories } = useSelector((state: RootState) => state.categories);
+  const {
+    loading,
+    hasMore,
+    products,
+    productsImages,
+    productsVariations,
+    startRange,
+  } = useSelector((state: RootState) => state.products);
+
+  // айдишник выбранной категории
   const [selectedCategory, setSelectedCategory] = useState<number>();
-  const [products, setProducts] = useState<Product[]>([]);
-  const [productsImages, setProductsImages] = useState<ProductImage[]>([]);
-  const [productsVariations, setProductsVariations] = useState<
-    ProductVariation[]
-  >([]);
 
-  // стейты для infinity scroll
-  const [loading, setLoading] = useState<boolean>(false);
-  const [hasMore, setHasMore] = useState<boolean>(true);
-  const [startRange, setStartRange] = useState<number>(0);
-
-  // Сразу загружаем все имеющиеся категории
+  // загружаем все имеющиеся категории
   useEffect(() => {
-    getCategories().then(setCategories);
-  }, []);
+    if (!categories.length) {
+      dispatch(fetchCategories());
+    }
+  }, [dispatch, categories]);
 
   // подгружаем новую порцию товаров при изменении категории или "страницы"
   useEffect(() => {
@@ -43,12 +48,24 @@ const Main = () => {
     // eslint-disable-next-line
   }, [startRange, selectedCategory]);
 
+  /** Функция подгрузки товаров */
+  const loadMoreProducts = () => {
+    if (loading || !hasMore) return;
+
+    dispatch(
+      fetchAllProducts({
+        startRange,
+        selectedCategory,
+      })
+    );
+  };
+
   // слушатель скролла
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting && hasMore && !loading) {
-          setStartRange((prevStartRange) => prevStartRange + 16);
+          dispatch(incrementStartRange());
         }
       },
       {
@@ -66,29 +83,25 @@ const Main = () => {
         observer.unobserve(loaderRef.current);
       }
     };
-  }, [loading, hasMore]);
+  }, [loading, hasMore, dispatch]);
 
   // подгружаем изображения и варианты товаров для новой порции товаров
   useEffect(() => {
     if (products.length) {
-      // выбираем айдишники только для новой порции, поскольку эндпоинт 
+      // выбираем айдишники только для новой порции товаров, поскольку эндпоинт
       // не может вернуть так много элементов изображений и вариантов
       const productsIds = products
         ?.slice(startRange, startRange + 16)
         .map((item) => item.id);
-      
+
       if (productsIds.length) {
         // загружаем изображения товаров
-        getProductImages(productsIds).then((data) =>
-          setProductsImages((prev) => [...prev, ...data])
-        );
+        dispatch(fetchProductImages(productsIds));
         // загружаем варианты товаров
-        getProductVariations(productsIds).then((data) =>
-          setProductsVariations((prev) => [...prev, ...data])
-        );
+        dispatch(fetchProductVariations(productsIds));
       }
     }
-  }, [products, startRange]);
+  }, [products, startRange, dispatch]);
 
   // генерируем рандомные цвета для отображения категорий
   const colors = useMemo(
@@ -96,28 +109,12 @@ const Main = () => {
     [categories]
   );
 
-  /** Функция подгрузки товаров */
-  const loadMoreProducts = () => {
-    if (loading || !hasMore) return;
-
-    setLoading(true);
-    getAllProducts(startRange, selectedCategory)
-      .then((data) => {
-        if (data.length === 0) {
-          setHasMore(false);
-        } else {
-          setProducts((prevData) => [...prevData, ...data]);
-        }
-      })
-      .finally(() => setLoading(false));
-  };
-
   // при изменении категории очищаем список товаров, открываем возможность для загрузки с нуля
   const handleOnCategoryClick = (categoryId: number) => {
-    setProducts([]);
-    setStartRange(0);
-    setHasMore(true);
-    setSelectedCategory(categoryId);
+    if (categoryId !== selectedCategory) {
+      dispatch(resetProducts());
+      setSelectedCategory(categoryId);
+    }
   };
 
   return (

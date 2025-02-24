@@ -1,8 +1,10 @@
 import React, { FC, useMemo } from "react";
 import css from "./index.module.css";
-import { ProductImage, ProductVariation } from "../../../../api/productsApi";
 import { useNavigate } from "react-router-dom";
-import { handleAddToChart } from "../../../../api/helpers";
+import { ProductImage, ProductVariation } from "../../../../redux/types";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../../redux/store/store";
+import { addToChart } from "../../../../redux/reducers/chart";
 
 type Props = {
   productId: number;
@@ -19,6 +21,8 @@ const ProductCard: FC<Props> = ({
   productVariations,
 }) => {
   const navigate = useNavigate();
+
+  const dispatch = useDispatch<AppDispatch>()
 
   // находим вариант товара с наименьшей ценой
   const lowerPriceVariation = useMemo(() => {
@@ -63,10 +67,11 @@ const ProductCard: FC<Props> = ({
             e.stopPropagation();
             if (lowerPriceVariation) {
               // добавляем товар в корзину (вариант с самой дешевой ценой)
-              handleAddToChart({
+              dispatch(addToChart({
                 productId,
                 variantId: lowerPriceVariation.id,
-              });
+                priceForItem: lowerPriceVariation.price
+              }))
             }
           }}
         >

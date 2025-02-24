@@ -19,7 +19,6 @@ const HistoryItem: FC<Props> = ({
   address,
   onClick,
 }) => {
-
   return (
     <div className={css.container} onClick={() => onClick(orderId)}>
       <div className={css.block}>

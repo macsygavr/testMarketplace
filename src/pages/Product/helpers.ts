@@ -1,4 +1,4 @@
-import { ProductVariationPropertyValue } from "../../api/productsApi";
+import { ProductVariationPropertyValue } from "../../redux/types";
 import { ProductProperties } from "./Product";
 
 export const filterProperties = ({

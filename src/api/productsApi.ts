@@ -1,47 +1,12 @@
+import {
+  Product,
+  ProductImage,
+  ProductVariation,
+  ProductVariationProperty,
+  ProductVariationPropertyListValue,
+  ProductVariationPropertyValue,
+} from "../redux/types";
 import { fetchApiWrapper } from "./helpers";
-
-export type Product = {
-  category_id: number;
-  description: string;
-  id: number;
-  name: string;
-};
-
-export type ProductImage = {
-  id: number;
-  image_name: string;
-  image_url: string;
-  product_id: number;
-};
-
-export type ProductVariation = {
-  id: number;
-  price: number;
-  product_id: number;
-  stock: number;
-};
-
-export type ProductVariationPropertyValue = {
-  id: number;
-  product_variation_id: number;
-  product_variation_property_id: number;
-  product_variation_property_list_value_id: number;
-  value_float: number;
-  value_int: number;
-  value_string: string;
-};
-
-export type ProductVariationPropertyListValue = {
-  id: number;
-  product_variation_property_id: number;
-  value: string;
-};
-
-export type ProductVariationProperty = {
-  id: number;
-  name: string;
-  type: number;
-};
 
 export const getAllProducts = (
   startRange: number,
