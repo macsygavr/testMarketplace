@@ -7,7 +7,7 @@
   display: flex;
   flex-direction: column;
   margin-top: 10px;
-  width: 600px;
+  max-width: 600px;
 }
 
 .listContainer > div:last-child {

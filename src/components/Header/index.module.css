@@ -4,6 +4,16 @@
   padding: 20px 50px;
 }
 
+.responsiveContainer {
+  display: flex;
+  align-items: center;
+}
+
+.responsiveSubContainer {
+  display: flex;
+  align-items: center;
+}
+
 .iconText {
   font-weight: 700;
   font-size: 38px;
@@ -111,4 +121,37 @@
   left: -110px;
   width: 214px;
   height: 141px;
+}
+
+@media screen and (max-width: 768px) {
+  .container {
+    box-sizing: border-box;
+    flex-direction: column;
+    padding: 10px 25px;
+    width: 100vw;
+    row-gap: 10px;
+  }
+
+  .responsiveContainer {
+    width: 100%;
+    justify-content: space-between;
+  } 
+
+  .searchInputContainer {
+    width: 100%;
+    margin-right: 0px;
+  }
+
+  .searchBtn {
+    min-width: 44px;
+    height: 44px;
+  }
+
+  .searchBtnContainer {
+    right: 49px;
+  }
+
+  .searchInput {
+    padding: 16px 60px 16px 20px;
+  }
 }

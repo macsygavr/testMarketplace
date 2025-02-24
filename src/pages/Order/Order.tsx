@@ -55,7 +55,7 @@ const Order = () => {
     if (chartValues && productsVariations) {
       const priceList = chartValues.map(
         (item) =>
-          productsVariations.find((el) => el.id === item.variantId)?.price
+          (productsVariations.find((el) => el.id === item.variantId)?.price ?? 0) * (item.count ?? 0)
       );
 
       return (priceList as number[]).reduce((acc, item) => acc + item, 0);

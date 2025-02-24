@@ -3,8 +3,11 @@ import css from "./index.module.css";
 import ChartIcon from "../../assets/icons/ChartIcon";
 import SearchIcon from "../../assets/icons/SearchIcon";
 import { useNavigate } from "react-router-dom";
+import { useMediaQuery } from "react-responsive";
 
 const Header = () => {
+  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
+
   const [searchValue, setSearchValue] = useState("");
   const navigate = useNavigate();
 
@@ -22,11 +25,31 @@ const Header = () => {
 
   return (
     <div className={css.container}>
-      <div className={css.iconText} onClick={handleGoToMainPage}>
-        React
-      </div>
-      <div className={css.historyBtnContainer} onClick={handleGoToOrderPage}>
-        История заказов
+      <div className={css.responsiveContainer}>
+        <div className={css.responsiveSubContainer}>
+          <div className={css.iconText} onClick={handleGoToMainPage}>
+            React
+          </div>
+          <div
+            className={css.historyBtnContainer}
+            onClick={handleGoToOrderPage}
+          >
+            История заказов
+          </div>
+        </div>
+        {isMobile && (
+          <div className={css.profileContainer}>
+            <div className={css.chartContainer} onClick={handleGoToChart}>
+              <div className={css.chartIcon}>
+                <ChartIcon />
+              </div>
+              <div className={css.chartCounter}>0</div>
+            </div>
+            <div className={css.imgContainer}>
+              <img className={css.mainImg} src={"/avatar.png"} alt={""} />
+            </div>
+          </div>
+        )}
       </div>
       <div className={css.searchInputContainer}>
         <input
@@ -41,17 +64,19 @@ const Header = () => {
           </button>
         </div>
       </div>
-      <div className={css.profileContainer}>
-        <div className={css.chartContainer} onClick={handleGoToChart}>
-          <div className={css.chartIcon}>
-            <ChartIcon />
+      {!isMobile && (
+        <div className={css.profileContainer}>
+          <div className={css.chartContainer} onClick={handleGoToChart}>
+            <div className={css.chartIcon}>
+              <ChartIcon />
+            </div>
+            <div className={css.chartCounter}>0</div>
           </div>
-          <div className={css.chartCounter}>0</div>
+          <div className={css.imgContainer}>
+            <img className={css.mainImg} src={"/avatar.png"} alt={""} />
+          </div>
         </div>
-        <div className={css.imgContainer}>
-          <img className={css.mainImg} src={"/avatar.png"} alt={""} />
-        </div>
-      </div>
+      )}
     </div>
   );
 };

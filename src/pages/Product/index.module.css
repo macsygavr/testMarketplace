@@ -130,3 +130,29 @@
   border: 1px solid #2967ff;
   color: #2967ff;
 }
+
+@media screen and (max-width: 768px) {
+  .productContainer {
+    margin-top: 22px;
+  }
+
+  .productName {
+    font-size: 24px;
+    line-height: unset;
+    color: #2d2d2f;
+  }
+
+  .detailInfoContainer {
+    flex-direction: column;
+  }
+
+  .carouselContainer {
+    width: 100%;
+  }
+
+  .infoContainer {
+    box-sizing: border-box;
+    width: 100%;
+    margin: 20px 0px 40px;
+  }
+}

@@ -21,7 +21,7 @@
   margin-top: 30px;
   border: 1px solid #aec2ea;
   border-radius: 20px;
-  min-width: 852px;
+  min-width: 730px;
 }
 
 .summaryContainer {
@@ -73,4 +73,52 @@
 
 .summaryImage {
   min-width: 165px;
+}
+
+@media screen and (max-width: 768px) {
+  .chartContainer {
+    margin-bottom: 40px;
+    min-width: 0px;
+  }
+
+  .summaryContainer {
+    height: unset;
+  } 
+
+  .summaryInfoContainer {
+    justify-content: space-between;
+    align-items: center;
+    column-gap: 10px;
+    box-sizing: border-box;
+    min-width: 100%;
+    padding: 10px 25px;
+  }
+
+  .summaryImage {
+    visibility: hidden;
+    width: 0px;
+  }
+
+  .chartListContainer {
+    padding: 10px 25px;
+  }
+
+  .orderBtnContainer {
+    margin: 16px 0px 6px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .summaryInfoContainer {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .orderBtnContainer {
+    width: 100%;
+  }
+
+  .priceContainer {
+    align-items: center;
+  }
 }

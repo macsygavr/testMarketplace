@@ -60,18 +60,22 @@ const ChartListItem: FC<Props> = ({
   return (
     <div className={css.container}>
       <div className={css.leftContainer}>
-        <img
-          onClick={onClick}
-          className={css.img}
-          src={productImage?.image_url}
-          alt=""
-        />
-        <div className={css.productNameContainer} onClick={onClick}>
-          <span className={css.name}>{product?.name}</span>
-          <span
-            className={css.variation}
-          >{`${chartItem.uniqProperties?.join(' / ') ?? ''}`}</span>
+        <div className={css.responsiveContainer}>
+          <img
+            onClick={onClick}
+            className={css.img}
+            src={productImage?.image_url}
+            alt=""
+          />
+          <div className={css.productNameContainer} onClick={onClick}>
+            <span className={css.name}>{product?.name}</span>
+            <span className={css.variation}>{`${
+              chartItem.uniqProperties?.join(" / ") ?? ""
+            }`}</span>
+          </div>
         </div>
+      </div>
+      <div className={css.responsiveContainer}>
         <div className={css.countContainer}>
           <div className={css.iconContainer} onClick={handleMinus}>
             <MinusIcon />
@@ -85,9 +89,9 @@ const ChartListItem: FC<Props> = ({
           {productVariation &&
             `${(productVariation?.price * count).toLocaleString()} ₽`}
         </span>
-      </div>
-      <div className={css.iconContainer} onClick={handleDeleteItem}>
-        <TrashIcon />
+        <div className={css.trashIconContainer} onClick={handleDeleteItem}>
+          <TrashIcon />
+        </div>
       </div>
     </div>
   );

@@ -5,3 +5,10 @@
   column-gap: 20px;
   margin-top: 20px;
 }
+
+@media screen and (max-width: 768px) {
+  .orderListContainer {
+    grid-template-columns: 1fr;
+    row-gap: 10px;
+  }
+}

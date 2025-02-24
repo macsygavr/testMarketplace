@@ -1,11 +1,10 @@
 import React, { FC } from "react";
 import css from "./index.module.css";
-import { ChartItem } from "../../../../api/helpers";
 
 type Props = {
   orderDate: string;
   orderId: string;
-  products: ChartItem[];
+  productsCount: number;
   totalPrice: number;
   address: string;
   onClick: (id: string) => void;
@@ -14,11 +13,12 @@ type Props = {
 const HistoryItem: FC<Props> = ({
   orderDate,
   orderId,
-  products,
+  productsCount,
   totalPrice,
   address,
   onClick,
 }) => {
+
   return (
     <div className={css.container} onClick={() => onClick(orderId)}>
       <div className={css.block}>
@@ -32,7 +32,7 @@ const HistoryItem: FC<Props> = ({
       <div className={css.horisontalBlockContainer}>
         <div className={css.block}>
           <span className={css.title}>Кол-во товаров</span>
-          <span className={css.value}>{products.length} шт.</span>
+          <span className={css.value}>{productsCount} шт.</span>
         </div>
         <div className={css.block}>
           <span className={css.title}>Стоимость заказа</span>

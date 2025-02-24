@@ -22,7 +22,6 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  width: 380px;
   cursor: pointer;
 }
 
@@ -64,6 +63,12 @@
   cursor: pointer;
 }
 
+.trashIconContainer {
+  display: flex;
+  cursor: pointer;
+  margin-left: 20px;
+}
+
 .price {
   font-family: Montserrat;
   font-weight: 600;
@@ -71,4 +76,41 @@
   line-height: 22px;
   color: #2d2d2f;
   white-space: nowrap;
+}
+
+.responsiveContainer {
+  display: flex;
+  column-gap: 20px;
+}
+
+@media screen and (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+  
+  .leftContainer {
+    flex-direction: column;
+    row-gap: 10px;
+  }
+
+  .leftContainer > div:first-child {
+    margin-top: 0px;
+  }
+  
+  .responsiveContainer {
+    margin-top: 10px;
+    align-items: center;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .responsiveContainer {
+    flex-direction: column;
+    justify-content: center;
+    row-gap: 10px;
+  }
+
+  .trashIconContainer {
+    margin-left: 0px;
+  }
 }

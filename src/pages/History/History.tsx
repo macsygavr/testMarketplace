@@ -23,6 +23,12 @@ const History = () => {
     }
   }, []);
 
+  const getProductsCount = (orderItem: OrderItem) => {
+    return orderItem.products
+      ?.map((item) => item.count)
+      .reduce((acc, item) => (acc ?? 0) + (item ?? 0), 0);
+  };
+
   return (
     <>
       <PageTittle title="История заказов" />
@@ -33,7 +39,7 @@ const History = () => {
             orderId={item.orderId}
             orderDate={item.orderDate}
             totalPrice={item.totalPrice}
-            products={item.products}
+            productsCount={getProductsCount(item) ?? 0}
             address={item.address}
             onClick={handleGoToDetails}
           />

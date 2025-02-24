@@ -66,9 +66,38 @@
 
   font-size: 14px;
   line-height: 16px;
-  color: #8D8D8E;
+  color: #8d8d8e;
 }
 
 .clickable {
   cursor: pointer;
+}
+
+@media screen and (max-width: 768px) {
+  .container {
+    box-sizing: border-box;
+    width: 100vw;
+    height: unset;
+    padding: 10px 25px;
+  }
+
+  .upperBlock {
+    align-items:center;
+    flex-direction: column;
+  }
+
+  .actionsBlock {
+    flex-direction: column;
+    row-gap: 16px;
+  }
+
+  .actionsSubblockContainer {
+    align-items: center;
+  }
+
+  .buttomBlock {
+    flex-direction: column;
+    row-gap: 10px;
+    margin-top: 20px;
+  }
 }
