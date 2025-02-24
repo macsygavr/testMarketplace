@@ -31,6 +31,7 @@ import { useDispatch } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store/store";
 import { useSelector } from "react-redux";
 import { addToChart } from "../../redux/reducers/chart";
+import ProductChartController from "../../components/ProductChartController/ProductChartController";
 
 // сущность свойств товара - айдишник варианта товара и список его свойств в формате "имя: значение"
 export type ProductProperties = {
@@ -50,6 +51,7 @@ const Product = () => {
   const { products, productsImages, productsVariations } = useSelector(
     (state: RootState) => state.products
   );
+  const { chart } = useSelector((state: RootState) => state.chart);
 
   // стейт для карусели
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
@@ -271,6 +273,11 @@ const Product = () => {
 
   const priceString = `${price.toLocaleString()}₽`;
 
+  const currentProductInChart = chart.find(
+    (item) =>
+      item.productId === productId && item.variantId === selectedVariationId
+  );
+
   return (
     <>
       <BackButton />
@@ -336,29 +343,36 @@ const Product = () => {
                 ))}
             </div>
             <div className={css.btnContainer}>
-              <Button
-                onClick={() => {
-                  if (selectedVariationId) {
-                    // получаем уникальные свойства выбранного варианта товара
-                    // и сохраняем в корзину для отображения в дальнейшем
-                    const uniqProperties = productUniqProperties.find(
-                      (item) => item.productVariationid === selectedVariationId
-                    )?.values;
+              {currentProductInChart ? (
+                <div className={css.chartController}>
+                  <ProductChartController chartItem={currentProductInChart} />
+                </div>
+              ) : (
+                <Button
+                  onClick={() => {
+                    if (selectedVariationId) {
+                      // получаем уникальные свойства выбранного варианта товара
+                      // и сохраняем в корзину для отображения в дальнейшем
+                      const uniqProperties = productUniqProperties.find(
+                        (item) =>
+                          item.productVariationid === selectedVariationId
+                      )?.values;
 
-                    // добавляем товар в корзину
-                    dispatch(
-                      addToChart({
-                        productId: productId,
-                        variantId: selectedVariationId,
-                        priceForItem: price,
-                        uniqProperties,
-                      })
-                    );
-                  }
-                }}
-              >
-                В корзину за {priceString}
-              </Button>
+                      // добавляем товар в корзину
+                      dispatch(
+                        addToChart({
+                          productId: productId,
+                          variantId: selectedVariationId,
+                          priceForItem: price,
+                          uniqProperties,
+                        })
+                      );
+                    }
+                  }}
+                >
+                  В корзину за {priceString}
+                </Button>
+              )}
             </div>
           </div>
         </div>

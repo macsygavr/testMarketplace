@@ -70,3 +70,7 @@
   height: 138px;
   object-fit: contain;
 }
+
+.countContainer {
+  margin-top: 10px;
+}

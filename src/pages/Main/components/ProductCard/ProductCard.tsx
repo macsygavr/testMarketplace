@@ -3,8 +3,10 @@ import css from "./index.module.css";
 import { useNavigate } from "react-router-dom";
 import { ProductImage, ProductVariation } from "../../../../redux/types";
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../../../redux/store/store";
+import { AppDispatch, RootState } from "../../../../redux/store/store";
 import { addToChart } from "../../../../redux/reducers/chart";
+import { useSelector } from "react-redux";
+import ProductChartController from "../../../../components/ProductChartController/ProductChartController";
 
 type Props = {
   productId: number;
@@ -22,7 +24,8 @@ const ProductCard: FC<Props> = ({
 }) => {
   const navigate = useNavigate();
 
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useDispatch<AppDispatch>();
+  const { chart } = useSelector((state: RootState) => state.chart);
 
   // находим вариант товара с наименьшей ценой
   const lowerPriceVariation = useMemo(() => {
@@ -40,6 +43,11 @@ const ProductCard: FC<Props> = ({
   const handleGoToProductPage = () => {
     navigate(`/product/${productId}`);
   };
+
+  const currentProductInChart = chart.find(
+    (item) =>
+      item.productId === productId && item.variantId === lowerPriceVariation?.id
+  );
 
   return (
     <div className={css.container} onClick={handleGoToProductPage}>
@@ -61,22 +69,33 @@ const ProductCard: FC<Props> = ({
             <span className={css.discount}>-10%</span>
           </div>
         </div>
-        <button
-          className={css.button}
-          onClick={(e) => {
-            e.stopPropagation();
-            if (lowerPriceVariation) {
-              // добавляем товар в корзину (вариант с самой дешевой ценой)
-              dispatch(addToChart({
-                productId,
-                variantId: lowerPriceVariation.id,
-                priceForItem: lowerPriceVariation.price
-              }))
-            }
-          }}
-        >
-          Добавить в корзину
-        </button>
+        {currentProductInChart ? (
+          <div
+            className={css.countContainer}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <ProductChartController chartItem={currentProductInChart} />
+          </div>
+        ) : (
+          <button
+            className={css.button}
+            onClick={(e) => {
+              e.stopPropagation();
+              if (lowerPriceVariation) {
+                // добавляем товар в корзину (вариант с самой дешевой ценой)
+                dispatch(
+                  addToChart({
+                    productId,
+                    variantId: lowerPriceVariation.id,
+                    priceForItem: lowerPriceVariation.price,
+                  })
+                );
+              }
+            }}
+          >
+            Добавить в корзину
+          </button>
+        )}
       </div>
     </div>
   );

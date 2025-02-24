@@ -40,30 +40,6 @@
   color: #00000033;
 }
 
-.countContainer {
-  display: flex;
-  align-items: center;
-  border: 1px solid #aec2ea;
-  border-radius: 35px;
-  height: 44px;
-  padding: 12px;
-  box-sizing: border-box;
-}
-
-.count {
-  font-family: Montserrat;
-  font-size: 16px;
-  line-height: 22px;
-  color: #2d2d2f;
-  cursor: default;
-  padding: 0px 26px;
-}
-
-.iconContainer {
-  display: flex;
-  cursor: pointer;
-}
-
 .trashIconContainer {
   display: flex;
   cursor: pointer;

@@ -131,6 +131,10 @@
   color: #2967ff;
 }
 
+.chartController > div {
+  padding: 26px;
+}
+
 @media screen and (max-width: 768px) {
   .productContainer {
     margin-top: 22px;

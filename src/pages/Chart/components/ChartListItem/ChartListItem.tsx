@@ -1,16 +1,11 @@
 import React, { FC } from "react";
 import css from "./index.module.css";
-import MinusIcon from "../../../../assets/icons/MinusIcon";
-import PlusIcon from "../../../../assets/icons/PlusIcon";
 import TrashIcon from "../../../../assets/icons/TrashIcon";
 import { ChartItem, ProductImage } from "../../../../redux/types";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../../redux/store/store";
-import {
-  addToChart,
-  removeAllProductItemsFromChart,
-  removeOneProductItemFromChart,
-} from "../../../../redux/reducers/chart";
+import { removeAllProductItemsFromChart } from "../../../../redux/reducers/chart";
+import ProductChartController from "../../../../components/ProductChartController/ProductChartController";
 
 type Props = {
   chartItem: ChartItem;
@@ -27,18 +22,6 @@ const ChartListItem: FC<Props> = ({
   onClick,
 }) => {
   const dispatch = useDispatch<AppDispatch>();
-
-  // добавляем в корзину еще одну единицу товара
-  const handlePlus = () => {
-    dispatch(addToChart(chartItem));
-  };
-
-  // удаляем из корзины одну единицу товара
-  const handleMinus = () => {
-    if ((chartItem.count ?? 0) > 0) {
-      dispatch(removeOneProductItemFromChart(chartItem));
-    }
-  };
 
   // удаляем из корзины всю позицию целиком
   const handleDeleteItem = () => {
@@ -64,15 +47,7 @@ const ChartListItem: FC<Props> = ({
         </div>
       </div>
       <div className={css.responsiveContainer}>
-        <div className={css.countContainer}>
-          <div className={css.iconContainer} onClick={handleMinus}>
-            <MinusIcon />
-          </div>
-          <span className={css.count}>{chartItem.count}</span>
-          <div className={css.iconContainer} onClick={handlePlus}>
-            <PlusIcon />
-          </div>
-        </div>
+        <ProductChartController chartItem={chartItem} />
         <span className={css.price}>
           {(chartItem.priceForItem * (chartItem.count ?? 0)).toLocaleString()} ₽
         </span>
