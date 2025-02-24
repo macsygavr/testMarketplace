@@ -21,7 +21,6 @@
   margin-top: 30px;
   border: 1px solid #aec2ea;
   border-radius: 20px;
-  min-width: 730px;
 }
 
 .summaryContainer {
@@ -75,6 +74,22 @@
   min-width: 165px;
 }
 
+@media screen and (max-width: 1184px) {
+  .summaryImage {
+    visibility: hidden;
+    width: 0px;
+    min-width: 0px;
+  }
+
+  .summaryInfoContainer {
+    justify-content: space-between;
+    align-items: center;
+    column-gap: 10px;
+    box-sizing: border-box;
+    min-width: 100%;
+  }
+}
+
 @media screen and (max-width: 768px) {
   .chartContainer {
     margin-bottom: 40px;
@@ -83,20 +98,10 @@
 
   .summaryContainer {
     height: unset;
-  } 
-
-  .summaryInfoContainer {
-    justify-content: space-between;
-    align-items: center;
-    column-gap: 10px;
-    box-sizing: border-box;
-    min-width: 100%;
-    padding: 10px 25px;
   }
 
-  .summaryImage {
-    visibility: hidden;
-    width: 0px;
+  .summaryInfoContainer {
+    padding: 10px 25px;
   }
 
   .chartListContainer {
