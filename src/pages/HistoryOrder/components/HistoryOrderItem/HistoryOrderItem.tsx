@@ -11,6 +11,7 @@ type Props = {
   onClick: () => void;
 };
 
+/** Элемент списка истории заказа */
 const HistoryOrderItem: FC<Props> = ({
   productImage,
   productName,

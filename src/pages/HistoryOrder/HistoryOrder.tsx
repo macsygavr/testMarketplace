@@ -15,7 +15,9 @@ import {
   ProductVariation,
 } from "../../api/productsApi";
 
+/** Страница подробной информации об истории заказа */
 const HistoryOrder = () => {
+  // получаем номер заказа
   const { id: orderId } = useParams();
   const navigate = useNavigate();
 
@@ -23,8 +25,9 @@ const HistoryOrder = () => {
   const [products, setProducts] = useState<Product[]>();
   const [productsImages, setProductImages] = useState<ProductImage[]>();
   const [productsVariations, setProductVariations] =
-    useState<ProductVariation[]>();
+    useState<ProductVariation[]>(); 
 
+  // получаем оформленные в прошлом заказы из local storage и находим соответствующий номеру заказа из урла
   useEffect(() => {
     if (orderId) {
       const orderValues = localStorage.getItem("history");
@@ -40,6 +43,7 @@ const HistoryOrder = () => {
     }
   }, [orderId]);
 
+  // получаем данные, фото и варианты для каждого продукта из заказа
   useEffect(() => {
     if (productList.length > 0) {
       const productIds = productList.map((item) => item.productId);
@@ -49,6 +53,7 @@ const HistoryOrder = () => {
     }
   }, [productList]);
 
+  // функция перехода на страницу соответствующего варианта товара
   const handleGoToProductPage = ({
     productId,
     variantId,

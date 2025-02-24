@@ -27,22 +27,29 @@ import { filterProperties, isProductVariantsEqual } from "./helpers";
 import Button from "../../components/Button/Button";
 import BackButton from "../../components/BackButton/BackButton";
 
+// сущность свойств товара - айдишник варианта товара и список его свойств в формате "имя: значение"
 export type ProductProperties = {
   productVariationid?: number;
   values: string[];
 };
 
+/** Страница подробной информации о товаре */
 const Product = () => {
+  // получаем id товара и варианта из урла
   const { id, variantId } = useParams();
   const productId = Number(id);
 
+  // стейт для карусели
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
 
+  // стейты товаров
   const [product, setProduct] = useState<ProductType>();
   const [productImage, setProductImage] = useState<ProductImage[]>([]);
   const [productVariations, setProductVariations] =
     useState<ProductVariation[]>();
   const [selectedVariationId, setSelectedVariationId] = useState<number>();
+
+  // стейты свойств товаров
   const [productVariationPropertyValues, setProductVariationPropertyValues] =
     useState<ProductVariationPropertyValue[]>();
   const [productVariationProperties, setProductVariationProperties] =
@@ -51,13 +58,18 @@ const Product = () => {
     productVariationPropertyListValues,
     setProductVariationPropertyListValues,
   ] = useState<ProductVariationPropertyListValue[]>();
+
+  // одинаковые свойства среди всех возможных вариантов товара
   const [productIdenticalProperties, setProductIdenticalProperties] = useState<
     string[]
   >([]);
+
+  // уникальные свойства
   const [productUniqProperties, setProductUniqProperties] = useState<
     ProductProperties[]
   >([]);
 
+  // получаем данные о товаре, изображения и варианты товара
   useEffect(() => {
     getProducts([productId]).then((data) => setProduct(data?.[0] ?? {}));
     getProductImages([productId]).then(setProductImage);
@@ -67,6 +79,7 @@ const Product = () => {
     });
   }, [productId, variantId]);
 
+  // получаем все свойства для каждого из вариантов товара и сортируем
   useEffect(() => {
     if (productVariations) {
       const propertyIds = productVariations.map((item) => item.id);
@@ -81,26 +94,34 @@ const Product = () => {
     }
   }, [productVariations]);
 
+  // получаем значения всех свойств для всех вариантов
   useEffect(() => {
     if (productVariationPropertyValues) {
+      // получаем айдишники свойств для всех вариантов
       const productVariationPropertyIds = productVariationPropertyValues.map(
         (item) => item.product_variation_property_id
       );
+
+      // запрашиваем нужные названия и типы свойств
       getProductVariationProperties(productVariationPropertyIds).then(
         setProductVariationProperties
       );
 
+      // получаем айдишники для свойств которые нужно получить из справочников
       const productVariationPropertyListValuesIds =
         productVariationPropertyValues
           .filter((item) => item.product_variation_property_list_value_id)
           .map((item) => item.product_variation_property_list_value_id);
 
+      // запрашиваем значения из справочников
       getProductVariationPropertyListValues(
         productVariationPropertyListValuesIds
       ).then(setProductVariationPropertyListValues);
     }
   }, [productVariationPropertyValues]);
 
+  // когда получили все варианты продукта, значения, названия и типы свойств
+  // и значения из справочников - собираем их в человекочитаемый вид
   useEffect(() => {
     if (
       productVariationPropertyValues &&
@@ -108,6 +129,7 @@ const Product = () => {
       productVariationProperties &&
       productVariations
     ) {
+      // коллекция свойств для каждого доступного варианта товара
       let productProperties: ProductProperties[] = productVariations.map(
         (item) => ({
           productVariationid: item.id,
@@ -115,13 +137,17 @@ const Product = () => {
         })
       );
 
+      // итерируемся по каждому свойству всех вариантов товара
       productVariationPropertyValues.forEach((item) => {
+        // находим наименование и тип данного свойства
         const property = productVariationProperties.find(
           (el) => el.id === item.product_variation_property_id
         );
 
+        // значение свойства
         let propertyValue;
-
+        
+        // получаем значение свойства из соответствующего места исходя из типа свойства
         switch (property?.type) {
           case 0:
             propertyValue = item.value_string;
@@ -145,6 +171,8 @@ const Product = () => {
             break;
         }
 
+        // получаем наименования уже имеющихся свойств для того чтобы не дублировать строки,
+        // а перечислить все значения для одного наименования через запятую
         const propertyNames = productProperties
           .find((el) => el.productVariationid === item.product_variation_id)
           ?.values?.map((item) => item.split(":")[0]);
@@ -169,11 +197,13 @@ const Product = () => {
         }
       });
 
+      // получаем уникальные свойства для дальнейшей возможности выбора варианта пользователем
       const uniqProperties = filterProperties({
         properties: productProperties,
         isUniq: true,
       });
 
+      // получаем одинаковые свойства для всех вариантов
       const identicalProperties = filterProperties({
         properties: productProperties,
         isUniq: false,
@@ -189,18 +219,19 @@ const Product = () => {
     productVariations,
   ]);
 
+  // определяем все ли свойства у всех вариантов одинаковые 
+  // и в зависимости от этого отображаем/скрываем блок с выбором вариантов
   const isAllVariantsEqual = useMemo(() => {
     if (productVariationPropertyValues) {
       return isProductVariantsEqual(productVariationPropertyValues);
     }
   }, [productVariationPropertyValues]);
 
+  // цена для выбранного варианта
   const price = `${(
     productVariations?.find((item) => item.id === selectedVariationId)?.price ??
     0
   ).toLocaleString()}₽`;
-
-  const selectedPropertyValues = productIdenticalProperties;
 
   return (
     <>
@@ -246,7 +277,7 @@ const Product = () => {
               <span className={css.priceText}>за шт.</span>
             </div>
             <div className={css.productPropertiesContainer}>
-              {selectedPropertyValues?.join(`\n`)}
+              {productIdenticalProperties?.join(`\n`)}
             </div>
             <div className={css.productVariationsSelector}>
               {!isAllVariantsEqual &&
@@ -270,9 +301,13 @@ const Product = () => {
               <Button
                 onClick={() => {
                   if (selectedVariationId) {
+                    // получаем уникальные свойства выбранного варианта товара 
+                    // и сохраняем в корзину для отображения в дальнейшем
                     const uniqProperties = productUniqProperties.find(
                       (item) => item.productVariationid === selectedVariationId
                     )?.values;
+                    
+                    // добавляем товар в корзину
                     handleAddToChart({
                       productId: productId,
                       variantId: selectedVariationId,

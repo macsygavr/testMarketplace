@@ -3,6 +3,7 @@ import css from "./index.module.css";
 import BackIcon from "../../assets/icons/BackIcon";
 import { useNavigate } from "react-router-dom";
 
+/** Кнопка возврата на предыдущую страницу */
 const BackButton = () => {
   const navigate = useNavigate();
 

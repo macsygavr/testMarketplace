@@ -1,3 +1,4 @@
+/** Функция генерации рандомного темного цвета */
 export const getRandomDarkColor = () => {
   const r = Math.floor(Math.random() * 200);
   const g = Math.floor(Math.random() * 200);

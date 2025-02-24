@@ -14,45 +14,36 @@ import ProductCard from "./components/ProductCard/ProductCard";
 import { getRandomDarkColor } from "./components/CategoryCard/helpers";
 import PageTittle from "../../components/PageTittle/PageTittle";
 
+/** Cтраница с карточками всех товаров и категориями */
 const Main = () => {
   const loaderRef = useRef<HTMLDivElement | null>(null);
 
+  // стейты товаров и категорий
   const [categories, setCategories] = useState<Category[]>();
+  const [selectedCategory, setSelectedCategory] = useState<number>();
   const [products, setProducts] = useState<Product[]>([]);
   const [productsImages, setProductsImages] = useState<ProductImage[]>([]);
   const [productsVariations, setProductsVariations] = useState<
     ProductVariation[]
   >([]);
-  const [selectedCategory, setSelectedCategory] = useState<number>();
 
+  // стейты для infinity scroll
   const [loading, setLoading] = useState<boolean>(false);
   const [hasMore, setHasMore] = useState<boolean>(true);
   const [startRange, setStartRange] = useState<number>(0);
 
+  // Сразу загружаем все имеющиеся категории
   useEffect(() => {
     getCategories().then(setCategories);
   }, []);
 
-  const loadMoreProducts = () => {
-    if (loading || !hasMore) return;
-
-    setLoading(true);
-    getAllProducts(startRange, selectedCategory)
-      .then((data) => {
-        if (data.length === 0) {
-          setHasMore(false);
-        } else {
-          setProducts((prevData) => [...prevData, ...data]);
-        }
-      })
-      .finally(() => setLoading(false));
-  };
-
+  // подгружаем новую порцию товаров при изменении категории или "страницы"
   useEffect(() => {
     loadMoreProducts();
     // eslint-disable-next-line
   }, [startRange, selectedCategory]);
 
+  // слушатель скролла
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -77,15 +68,21 @@ const Main = () => {
     };
   }, [loading, hasMore]);
 
+  // подгружаем изображения и варианты товаров для новой порции товаров
   useEffect(() => {
     if (products.length) {
+      // выбираем айдишники только для новой порции, поскольку эндпоинт 
+      // не может вернуть так много элементов изображений и вариантов
       const productsIds = products
         ?.slice(startRange, startRange + 16)
         .map((item) => item.id);
+      
       if (productsIds.length) {
+        // загружаем изображения товаров
         getProductImages(productsIds).then((data) =>
           setProductsImages((prev) => [...prev, ...data])
         );
+        // загружаем варианты товаров
         getProductVariations(productsIds).then((data) =>
           setProductsVariations((prev) => [...prev, ...data])
         );
@@ -93,11 +90,29 @@ const Main = () => {
     }
   }, [products, startRange]);
 
+  // генерируем рандомные цвета для отображения категорий
   const colors = useMemo(
     () => (categories ?? []).map(() => getRandomDarkColor()),
     [categories]
   );
 
+  /** Функция подгрузки товаров */
+  const loadMoreProducts = () => {
+    if (loading || !hasMore) return;
+
+    setLoading(true);
+    getAllProducts(startRange, selectedCategory)
+      .then((data) => {
+        if (data.length === 0) {
+          setHasMore(false);
+        } else {
+          setProducts((prevData) => [...prevData, ...data]);
+        }
+      })
+      .finally(() => setLoading(false));
+  };
+
+  // при изменении категории очищаем список товаров, открываем возможность для загрузки с нуля
   const handleOnCategoryClick = (categoryId: number) => {
     setProducts([]);
     setStartRange(0);

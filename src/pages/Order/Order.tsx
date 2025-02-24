@@ -24,16 +24,20 @@ export type OrderItem = {
 
 const Order = () => {
   const navigate = useNavigate();
+
+  // сейты с данными для оформления заказа
   const [date, setDate] = useState<string>("");
   const [time, setTime] = useState<string>("");
   const [address, setAddress] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
 
+  // стейты товаров и их вариантов
   const [chartValues, setChartValues] = useState<ChartItem[]>();
   const [productsVariations, setProductVariations] =
     useState<ProductVariation[]>();
 
+  // получаем товары из local storage, если корзина пуста, то редиректим на главную страницу
   useEffect(() => {
     const chartValues = localStorage.getItem("chart");
 
@@ -44,6 +48,7 @@ const Order = () => {
     }
   }, [navigate]);
 
+  // получаем варианты продуктов
   useEffect(() => {
     if (chartValues) {
       const productIds = chartValues.map((item) => item.productId);
@@ -51,20 +56,25 @@ const Order = () => {
     }
   }, [chartValues]);
 
+  // получаем суммарную стоимость всех товаров из корзины
   const totalPrice = useMemo(() => {
     if (chartValues && productsVariations) {
       const priceList = chartValues.map(
         (item) =>
-          (productsVariations.find((el) => el.id === item.variantId)?.price ?? 0) * (item.count ?? 0)
+          (productsVariations.find((el) => el.id === item.variantId)?.price ??
+            0) * (item.count ?? 0)
       );
 
       return (priceList as number[]).reduce((acc, item) => acc + item, 0);
     }
   }, [chartValues, productsVariations]);
 
+  // функция отправки заказа
   const handleOrder = () => {
     if (chartValues) {
+      // генерируем номер заказа
       const orderId = generateOrderNumber();
+      // получаем текущую дату
       const orderDate = format(new Date(), "dd.MM.yyyy");
 
       const order: OrderItem = {
@@ -79,10 +89,13 @@ const Order = () => {
         products: chartValues,
       };
 
+      // чистим корзину в localstorage
       localStorage.removeItem("chart");
+
 
       const history = localStorage.getItem("history");
 
+      // сохраняем данные о заказе в local storage и редиректим на страницу истории заказов
       if (history) {
         localStorage.setItem(
           "history",

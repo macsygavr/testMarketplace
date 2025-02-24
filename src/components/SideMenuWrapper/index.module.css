@@ -11,7 +11,7 @@
   min-width: 350px;
 }
 
-@media screen and (max-width: 1280px) {
+@media screen and (max-width: 1024px) {
   .rightBlock {
     min-width: 0px;
     max-width: 0px;

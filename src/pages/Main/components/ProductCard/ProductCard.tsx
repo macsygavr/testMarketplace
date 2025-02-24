@@ -11,6 +11,7 @@ type Props = {
   productVariations: ProductVariation[];
 };
 
+/** Карточка товара */
 const ProductCard: FC<Props> = ({
   productId,
   productName,
@@ -19,15 +20,19 @@ const ProductCard: FC<Props> = ({
 }) => {
   const navigate = useNavigate();
 
+  // находим вариант товара с наименьшей ценой
   const lowerPriceVariation = useMemo(() => {
     return productVariations?.sort((a, b) => a.price - b.price)?.[0];
   }, [productVariations]);
 
+  // наименьшая возможная цена
   const lowerPrice = lowerPriceVariation?.price;
 
+  // мок для отображения скидки
   const lowerPriceWithoutDiscount =
     lowerPrice && (lowerPrice + (lowerPrice / 100) * 10).toFixed(0);
 
+  // функция перехода на страницу подробной информаии о товаре
   const handleGoToProductPage = () => {
     navigate(`/product/${productId}`);
   };
@@ -57,6 +62,7 @@ const ProductCard: FC<Props> = ({
           onClick={(e) => {
             e.stopPropagation();
             if (lowerPriceVariation) {
+              // добавляем товар в корзину (вариант с самой дешевой ценой)
               handleAddToChart({
                 productId,
                 variantId: lowerPriceVariation.id,

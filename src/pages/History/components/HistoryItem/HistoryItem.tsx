@@ -10,6 +10,7 @@ type Props = {
   onClick: (id: string) => void;
 };
 
+/** Элемент истории */
 const HistoryItem: FC<Props> = ({
   orderDate,
   orderId,

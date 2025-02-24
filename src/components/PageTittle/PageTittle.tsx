@@ -5,6 +5,7 @@ type Props = {
   title: string;
 };
 
+/** Заголовок страницы */
 const PageTittle: FC<Props> = ({ title }) => {
   return <div className={css.title}>{title}</div>;
 };

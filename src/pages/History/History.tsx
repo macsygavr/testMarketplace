@@ -5,6 +5,7 @@ import HistoryItem from "./components/HistoryItem/HistoryItem";
 import PageTittle from "../../components/PageTittle/PageTittle";
 import { useNavigate } from "react-router-dom";
 
+/** Страница истории заказов */
 const History = () => {
   const navigate = useNavigate();
   const [historyList, setHistoryList] = useState<OrderItem[]>();
@@ -13,6 +14,7 @@ const History = () => {
     navigate(`/history-order/${id}`);
   };
 
+  // получаем оформленные в прошлом заказы из local storage
   useEffect(() => {
     const orderValues = localStorage.getItem("history");
 
@@ -23,6 +25,7 @@ const History = () => {
     }
   }, []);
 
+  // получаем суммарное количество всех товаров в заказе
   const getProductsCount = (orderItem: OrderItem) => {
     return orderItem.products
       ?.map((item) => item.count)

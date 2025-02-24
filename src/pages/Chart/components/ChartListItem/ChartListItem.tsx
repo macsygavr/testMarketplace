@@ -25,6 +25,7 @@ type Props = {
   onClick?: () => void;
 };
 
+/** Элемент корзины */
 const ChartListItem: FC<Props> = ({
   chartItem,
   product,
@@ -34,15 +35,18 @@ const ChartListItem: FC<Props> = ({
   onUpdatePrice,
   onClick,
 }) => {
+  // количество товара в корзине
   const [count, setCount] = useState<number>(chartItem.count ?? 1);
   const productVariationPrice = productVariation?.price;
 
+  // добавляем в корзину еще одну единицу товара
   const handlePlus = () => {
     setCount((old) => old + 1);
     handleAddToChart(chartItem);
     onUpdatePrice((totalPrice ?? 0) + (productVariationPrice ?? 0));
   };
 
+  // удаляем из корзины одну единицу товара
   const handleMinus = () => {
     if (count > 0) {
       setCount((old) => old - 1);
@@ -51,6 +55,7 @@ const ChartListItem: FC<Props> = ({
     }
   };
 
+  // удаляем из корзины всю позицию целиком
   const handleDeleteItem = () => {
     setCount(0);
     handleRemoveAllPiecesFromChart(chartItem);

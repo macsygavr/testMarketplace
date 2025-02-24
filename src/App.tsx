@@ -11,6 +11,13 @@ import SideMenuWrapper from "./components/SideMenuWrapper/SideMenuWrapper";
 import PageWrapper from "./components/PageWrapper/PageWrapper";
 import HistoryOrder from "./pages/HistoryOrder/HistoryOrder";
 
+// Main - страница с карточками всех товаров и категориями
+// Product - страница подробной информации о товаре
+// Chart - корзина
+// Order - страница оформления заказа
+// History - страница истории всех заказов
+// HistoryOrder - страница со списком товаров заказа из истории
+
 function App() {
   return (
     <>

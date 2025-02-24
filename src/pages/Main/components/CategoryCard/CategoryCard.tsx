@@ -7,6 +7,7 @@ type Props = {
   onClick: () => void;
 };
 
+/** Тег категории */
 const CategoryCard: FC<Props> = ({ categoryName, color, onClick }) => {
   return (
     <div

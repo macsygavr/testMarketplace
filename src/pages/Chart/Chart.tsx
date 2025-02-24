@@ -15,6 +15,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import Button from "../../components/Button/Button";
 
+/** Страница корзины */
 const Chart = () => {
   const navigate = useNavigate();
 
@@ -25,6 +26,7 @@ const Chart = () => {
   const [productsVariations, setProductVariations] =
     useState<ProductVariation[]>();
 
+  // получаем данные о всех добавленных в корзину товарах из local storage
   useEffect(() => {
     const chartValues = localStorage.getItem("chart");
 
@@ -35,6 +37,7 @@ const Chart = () => {
     }
   }, []);
 
+  // получаем данные о товаре, изображение и варианты для всех товаров из корзины
   useEffect(() => {
     if (list.length > 0) {
       const productIds = list.map((item) => item.productId);
@@ -44,6 +47,7 @@ const Chart = () => {
     }
   }, [list]);
 
+  // получаем суммарную стоимовть всех товаров
   useEffect(() => {
     if (list && productsVariations) {
       const prices = list.map((item) => {
@@ -60,19 +64,23 @@ const Chart = () => {
     }
   }, [list, productsVariations]);
 
+  // функция полной очистки корзины
   const handleClearChart = () => {
     localStorage.removeItem("chart");
     setList([]);
   };
 
+  // функция обновления цены
   const handleUpdatePrice = (price: number) => {
     setTotalPrice(price);
   };
 
+  // функция перехода на страницу оформления заказа
   const handleOrderButtonClick = () => {
     navigate("/order");
   };
 
+  // функция перехода на страницу подробной информации о конкретном варианте товара
   const handleGoToProductPage = ({
     productId,
     variantId,
