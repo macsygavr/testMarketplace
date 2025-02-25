@@ -5,8 +5,10 @@ import {
   getProductImages,
   getProductVariations,
 } from "../../api/productsApi";
+import { orm } from "../models";
 
 interface ProductsState {
+  productsOrm: any;
   products: Product[];
   productsImages: ProductImage[];
   productsVariations: ProductVariation[];
@@ -16,6 +18,7 @@ interface ProductsState {
 }
 
 const initialState: ProductsState = {
+  productsOrm: orm.getEmptyState(),
   products: [],
   productsImages: [],
   productsVariations: [],
@@ -48,6 +51,7 @@ const productsSlice = createSlice({
   initialState,
   reducers: {
     resetProducts: (state) => {
+      state.productsOrm = orm.getEmptyState();
       state.products = [];
       state.productsImages = [];
       state.productsVariations = [];
@@ -71,26 +75,46 @@ const productsSlice = createSlice({
         if (!action.payload.length) {
           state.hasMore = false;
         } else {
-          // Фильтрация дублированных товаров
-          const newProducts = action.payload.filter(
-            (newProduct) =>
-              !state.products.some((product) => product.id === newProduct.id)
-          );
-          state.products = [...state.products, ...newProducts];
+          // Нормализация данных
+          const session = orm.session(state.productsOrm);
+          action.payload.forEach((item) => {
+            //@ts-ignore
+            if (!session.Product.withId(item.id)) {
+              //@ts-ignore
+              session.Product.create(item);
+            }
+          });
+          // Запись orm для примера его использования
+          state.productsOrm = session.state;
+
+          // Запись нормализованного "классического" массива продуктов
+          const newProducts: Product[] = state.productsOrm.Product
+            ? Object.values(state.productsOrm.Product.itemsById)
+            : [];
+          state.products = newProducts;
         }
       })
       .addCase(fetchAllProducts.rejected, (state) => {
         state.loading = false;
       })
       .addCase(fetchProductImages.fulfilled, (state, action) => {
-        // Фильтруем фотографии, чтобы избежать дублирования
-        const newImages = action.payload.filter(
-          (newImage) =>
-            !state.productsImages.some(
-              (image) => image.product_id === newImage.product_id
-            )
-        );
-        state.productsImages = [...state.productsImages, ...newImages];
+        // Нормализация данных
+        const session = orm.session(state.productsOrm);
+        action.payload.forEach((item) => {
+          //@ts-ignore
+          if (!session.ProductImage.withId(item.id)) {
+            //@ts-ignore
+            session.ProductImage.create(item);
+          }
+        });
+        // Запись orm для примера его использования
+        state.productsOrm = session.state;
+
+        // Запись массива нормализованного "классического" массива изображений продуктов
+        const productsImages: ProductImage[] = state.productsOrm.ProductImage
+          ? Object.values(state.productsOrm.ProductImage.itemsById)
+          : [];
+        state.productsImages = productsImages;
       })
       .addCase(fetchProductVariations.fulfilled, (state, action) => {
         // Фильтруем варианты товаров, чтобы избежать дублирования

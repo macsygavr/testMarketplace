@@ -15,6 +15,7 @@ import {
   incrementStartRange,
   resetProducts,
 } from "../../redux/reducers/products";
+import { orm } from "../../redux/models";
 
 /** Cтраница с карточками всех товаров и категориями */
 const Main = () => {
@@ -23,14 +24,13 @@ const Main = () => {
   // получаем все нужные состояния из редакса
   const dispatch = useDispatch<AppDispatch>();
   const { categories } = useSelector((state: RootState) => state.categories);
-  const {
-    loading,
-    hasMore,
-    products,
-    productsImages,
-    productsVariations,
-    startRange,
-  } = useSelector((state: RootState) => state.products);
+  const { loading, hasMore, productsOrm, productsVariations, startRange } =
+    useSelector((state: RootState) => state.products);
+
+  // пример использования redux orm
+  const session = orm.session(productsOrm);
+  const products = session.Product.all().toModelArray();
+  const productsImages = session.ProductImage.all().toModelArray();
 
   // айдишник выбранной категории
   const [selectedCategory, setSelectedCategory] = useState<number>();
@@ -85,23 +85,23 @@ const Main = () => {
     };
   }, [loading, hasMore, dispatch]);
 
+  // выбираем айдишники только для новой порции товаров, поскольку эндпоинт
+  // не может вернуть так много элементов изображений и вариантов
+  const productsIds = useMemo(() => {
+    return products
+      ?.slice(startRange, startRange + 16)
+      .map((item) => item._fields.id);
+  }, [products.length, startRange, selectedCategory]);
+
   // подгружаем изображения и варианты товаров для новой порции товаров
   useEffect(() => {
-    if (products.length) {
-      // выбираем айдишники только для новой порции товаров, поскольку эндпоинт
-      // не может вернуть так много элементов изображений и вариантов
-      const productsIds = products
-        ?.slice(startRange, startRange + 16)
-        .map((item) => item.id);
-
-      if (productsIds.length) {
-        // загружаем изображения товаров
-        dispatch(fetchProductImages(productsIds));
-        // загружаем варианты товаров
-        dispatch(fetchProductVariations(productsIds));
-      }
+    if (productsIds.length) {
+      // загружаем изображения товаров
+      dispatch(fetchProductImages(productsIds));
+      // загружаем варианты товаров
+      dispatch(fetchProductVariations(productsIds));
     }
-  }, [products, startRange, dispatch]);
+  }, [productsIds, dispatch]);
 
   // генерируем рандомные цвета для отображения категорий
   const colors = useMemo(
